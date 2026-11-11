@@ -1,0 +1,47 @@
+/* Elegent design tokens — single source of truth.
+   Import AFTER `@import "tailwindcss";` in globals.css */
+@theme {
+  /* surfaces */
+  --color-canvas: #fff8f1;   /* page background */
+  --color-surface: #fbf3e6;  /* cards, social buttons */
+  --color-field: #f5ede1;    /* inputs, badges, trust box */
+  --color-sand: #efe7db;
+  --color-line: #e9e1d5;     /* dividers, meter track */
+
+  /* text */
+  --color-ink: #1e1b14;
+  --color-ink-muted: #444748;
+  --color-ink-subtle: #747878;
+  --color-ink-faint: #c4c7c7; /* placeholders */
+
+  /* brand */
+  --color-accent: #745940;
+  --color-peach: #ffdcbf;
+
+  /* feedback (not in the Figma file — added for form states) */
+  --color-danger: #ba1a1a;
+
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-playfair), ui-serif, Georgia, serif;
+
+  --radius-field: 2px;
+  --radius-card: 8px;
+  --radius-pill: 12px;
+
+  --shadow-hairline: 0 1px 1px rgb(0 0 0 / 0.05);
+  --shadow-cta: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+/* Type roles used all over the Figma file */
+@utility eyebrow {            /* 11 / 14, semibold, wide tracking */
+  font-size: 11px; line-height: 14px; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+}
+@utility label-caps {         /* 11 / 14, semibold, medium tracking */
+  font-size: 11px; line-height: 14px; font-weight: 600;
+  letter-spacing: 0.05em; text-transform: uppercase;
+}
+
+@layer base {
+  body { background: var(--color-canvas); color: var(--color-ink); font-family: var(--font-sans); }
+}
