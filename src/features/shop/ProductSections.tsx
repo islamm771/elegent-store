@@ -1,13 +1,13 @@
 "use client";
-import { useRef } from "react";
-import Link from "next/link";
-import { ChevronLeftIcon, ChevronRightIcon, PlusIcon, StarIcon } from "@/ui";
-import { money } from "@/lib/money";
 import { Photo } from "@/features/home/Photo";
+import { money } from "@/lib/money";
+import { ChevronLeftIcon, ChevronRightIcon, PlusIcon, StarIcon } from "@/ui";
+import Link from "next/link";
+import { useRef } from "react";
 import { categoryName, type ShopProduct } from "./catalog";
+import { colorTitles, type ReviewData } from "./details";
 import { notifyAdded } from "./notify";
 import { useStore } from "./store";
-import { colorTitles, type ReviewData } from "./details";
 
 export function PairingSection({ items }: { items: ShopProduct[] }) {
   const { add } = useStore();
@@ -22,11 +22,11 @@ export function PairingSection({ items }: { items: ShopProduct[] }) {
 
   return (
     <section className="py-12 lg:bg-surface/70">
-      <div className="mx-auto max-w-[1440px]">
-        <div className="flex items-end justify-between px-4 lg:px-6">
+      <div className="mx-auto max-w-360 px-4 lg:px-6">
+        <div className="flex items-end justify-between">
           <div>
             <p className="eyebrow text-accent"><span className="lg:hidden">Curated pairing</span><span className="hidden lg:inline">Editorial pairing</span></p>
-            <h2 className="font-serif text-2xl font-semibold leading-8 lg:text-[36px] lg:leading-[44px] lg:tracking-[-0.025em]"><span className="lg:hidden">Complete The Look</span><span className="hidden lg:inline">Complete The Aesthetic</span></h2>
+            <h2 className="font-serif text-2xl font-semibold leading-8 lg:text-[36px] lg:leading-11 lg:tracking-tight"><span className="lg:hidden">Complete The Look</span><span className="hidden lg:inline">Complete The Aesthetic</span></h2>
           </div>
           <div className="flex gap-2 lg:hidden">
             <button type="button" aria-label="Previous" onClick={() => by(-1)} className="grid size-9 place-items-center rounded-pill bg-field"><ChevronLeftIcon width={14} height={14} /></button>
@@ -35,7 +35,7 @@ export function PairingSection({ items }: { items: ShopProduct[] }) {
           <p className="hidden max-w-sm text-[15px] leading-6 text-ink-muted lg:block">Hand-selected pieces that complement the palette and silhouette of this one.</p>
         </div>
 
-        <ul ref={scroller} className="mt-6 flex snap-x gap-4 overflow-x-auto px-4 pb-2 [scrollbar-width:none] lg:mt-10 lg:grid lg:grid-cols-4 lg:gap-6 lg:overflow-visible lg:px-6">
+        <ul ref={scroller} className="mt-6 flex snap-x gap-4 overflow-x-auto pb-2 scrollbar-none lg:mt-10 lg:grid lg:grid-cols-4 lg:gap-6 lg:overflow-visible">
           {items.map((p) => (
             <li key={p.id} className="w-48 shrink-0 snap-start lg:w-auto">
               <div className="rounded-[8px] bg-surface p-2 lg:rounded-none lg:bg-transparent lg:p-0">
@@ -73,8 +73,8 @@ function Stars({ value, size = 14 }: { value: number; size?: number }) {
 export function ReviewsSection({ rating, count, data }: { rating: number; count: number; data?: ReviewData }) {
   const fit = data && [["Runs small", data.fit.small], ["True to size", data.fit.true], ["Runs large", data.fit.large]] as const;
   return (
-    <section id="reviews" className="hidden scroll-mt-32 px-6 py-12 lg:block">
-      <div className="mx-auto grid max-w-[1440px] grid-cols-12 gap-12">
+    <section id="reviews" className="hidden scroll-mt-32 py-12 lg:block">
+      <div className="mx-auto grid max-w-360 px-6 grid-cols-12 gap-12">
         <aside className="col-span-4 flex flex-col gap-5 bg-surface/70 p-6">
           <p className="eyebrow text-accent">Verified verdict</p>
           <div className="flex items-end gap-3">
@@ -106,10 +106,10 @@ export function ReviewsSection({ rating, count, data }: { rating: number; count:
         <div className="col-span-8 flex flex-col divide-y divide-line">
           {data ? data.items.map((r) => (
             <article key={r.author} className="flex flex-col gap-2 py-6 first:pt-0">
-              <div className="flex items-center justify-between"><Stars value={5} /><span className="text-[11px] font-semibold uppercase tracking-[0.05em] text-ink-subtle">{r.when}</span></div>
+              <div className="flex items-center justify-between"><Stars value={5} /><span className="text-[11px] font-semibold uppercase tracking-wider text-ink-subtle">{r.when}</span></div>
               <h3 className="text-lg font-semibold leading-7">{r.title}</h3>
               <p className="text-[15px] leading-6 text-ink-muted">{r.body}</p>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.1em]">{r.author} <span className="font-medium text-ink-subtle">· Verified buyer · Size {r.size}</span></p>
+              <p className="text-[11px] font-semibold uppercase tracking-widest">{r.author} <span className="font-medium text-ink-subtle">· Verified buyer · Size {r.size}</span></p>
             </article>
           )) : <p className="text-[15px] leading-6 text-ink-muted">No written reviews yet.</p>}
         </div>

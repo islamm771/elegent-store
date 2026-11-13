@@ -1,15 +1,15 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { getPairings, getProductBySlug } from "@/lib/shop-data";
 import { SiteFooter } from "@/features/shell/SiteFooter";
 import { SiteHeader } from "@/features/shell/SiteHeader";
 import { getDetail, makeSlides } from "@/features/shop/details";
-import { ProductBreadcrumb, ProductMobileHeader } from "@/features/shop/ProductChrome";
+import { ProductBreadcrumb } from "@/features/shop/ProductChrome";
 import { ProductGallery } from "@/features/shop/ProductGallery";
 import { ProductInfo } from "@/features/shop/ProductInfo";
 import { PairingSection, ReviewsSection } from "@/features/shop/ProductSections";
+import { authOptions } from "@/lib/auth";
+import { getPairings, getProductBySlug } from "@/lib/shop-data";
+import type { Metadata } from "next";
+import { getServerSession } from "next-auth";
+import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 type Props = { params: Promise<{ slug: string }> };
@@ -38,11 +38,11 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <>
-      <div className="hidden lg:block"><SiteHeader user={session?.user ?? null} /></div>
-      <ProductMobileHeader product={product} />
-      <main className="pt-16 lg:pt-[102px]">
+      <SiteHeader user={session?.user ?? null} />
+      {/* <ProductMobileHeader product={product} /> */}
+      <main className="pt-16 lg:pt-25.5">
         <ProductBreadcrumb product={product} />
-        <section className="mx-auto max-w-[1440px] lg:px-6 lg:pb-12">
+        <section className="mx-auto max-w-360 px-4 lg:px-6 lg:pb-12">
           <div className="lg:grid lg:grid-cols-12 lg:gap-12">
             <div className="lg:col-span-7"><ProductGallery product={product} slides={makeSlides(product)} capsule={detail.capsule} slowCraft={detail.slowCraft} /></div>
             <div className="lg:col-span-5"><ProductInfo product={product} detail={detail} /></div>
