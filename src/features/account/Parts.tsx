@@ -13,7 +13,7 @@ export function Avatar({ name, className }: { name: string; className?: string }
   );
 }
 
-/** Orders / Wishlist / Bag counters. Wishlist and bag live in the browser, orders will come from the database. */
+/** Orders / Wishlist / Bag counters. Wishlist and bag come from the signed-in user's account (database); orders are not built yet. */
 export function StatPills({ orders = 0, variant }: { orders?: number; variant: "mobile" | "desktop" }) {
   const { wishlist, count } = useStore();
   const items = [

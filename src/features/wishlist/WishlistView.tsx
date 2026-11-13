@@ -19,7 +19,7 @@ async function fetchProducts(query: string): Promise<ShopProduct[]> {
 }
 
 export function WishlistView() {
-  const { wishlist, ready, add, clearWishlist } = useStore();
+  const { wishlist, ready, signedIn, add, clearWishlist } = useStore();
   const [confirming, setConfirming] = useState(false);
   const [loaded, setLoaded] = useState<Record<string, ShopProduct>>({});
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
@@ -67,7 +67,7 @@ export function WishlistView() {
           <p className="eyebrow text-accent">Saved edits</p>
           <h1 className="font-serif text-[32px] font-medium leading-10 tracking-[-0.025em] lg:text-5xl lg:leading-[56px]">Your Wishlist</h1>
           <p className="text-[13px] leading-5 text-ink-muted lg:text-[15px] lg:leading-6" aria-live="polite">
-            {loading ? "Loading your saved pieces…" : status === "error" ? "We couldn’t load your saved pieces." : saved.length === 0 ? "Pieces you save will wait for you here." : `${saved.length} ${saved.length === 1 ? "piece" : "pieces"} saved on this device`}
+            {loading ? "Loading your saved pieces…" : status === "error" ? "We couldn’t load your saved pieces." : saved.length === 0 ? "Pieces you save will wait for you here." : `${saved.length} ${saved.length === 1 ? "piece" : "pieces"} saved ${signedIn ? "to your account" : "on this device"}`}
           </p>
         </div>
 
@@ -112,7 +112,7 @@ export function WishlistView() {
               <span className="grid size-12 shrink-0 place-items-center rounded-pill bg-[#fed9b9]"><HeartIcon width={20} height={20} /></span>
               <div>
                 <h2 className="font-serif text-2xl font-semibold leading-8">Nothing saved yet</h2>
-                <p className="max-w-lg pt-1 text-[15px] leading-6 text-ink-muted">Tap the heart on any piece to keep it here. Your wishlist is stored on this device.</p>
+                <p className="max-w-lg pt-1 text-[15px] leading-6 text-ink-muted">Tap the heart on any piece to keep it here. {signedIn ? "Your wishlist is saved to your account." : "It is stored on this device — sign in to keep it across devices."}</p>
               </div>
             </div>
             <Link href="/shop" className="rounded-field bg-black px-6 py-3 text-[13px] font-semibold uppercase tracking-[0.1em] text-white shadow-cta hover:bg-ink">Browse the capsule</Link>

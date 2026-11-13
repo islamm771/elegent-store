@@ -18,8 +18,8 @@ export function ProductCard({ product: p }: { product: ShopProduct }) {
   const glass = "backdrop-blur-[2px] bg-canvas/90";
 
   return (
-    <article className="flex flex-col rounded-[8px] bg-surface">
-      <Photo src={p.images[0]} tone={p.tone} alt={p.name} className="h-50.75 rounded-sm lg:h-85">
+    <article className="flex flex-col rounded-lg bg-surface">
+      <Photo src={p.images[0]} tone={p.tone} alt={p.name} className="h-50.75 rounded-t-lg lg:h-85">
         {p.badge && (
           <span className={cn("absolute left-2 top-2 rounded-pill px-2 py-0.5 text-[10px] font-bold uppercase leading-6 tracking-wider",
             p.badge.tone === "accent" ? "bg-accent text-white" : `${glass} text-ink`)}>{p.badge.text}</span>
@@ -36,7 +36,7 @@ export function ProductCard({ product: p }: { product: ShopProduct }) {
         </button>
       </Photo>
 
-      <div className="flex flex-col gap-1 pb-1 pt-3">
+      <div className="flex flex-col gap-1 p-3">
         <p className="flex items-center gap-1 text-[11px] font-medium tracking-widset text-ink-muted">
           <StarIcon width={11} height={11} fill="currentColor" className="text-accent" /> {p.rating.toFixed(1)} ({p.reviews})
         </p>

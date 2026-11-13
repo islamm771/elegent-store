@@ -2,6 +2,8 @@ import { UserIcon } from "@/ui";
 import Link from "next/link";
 import { SearchBar } from "../shop/Controls";
 import { BagButton } from "./BagButton";
+import { UserMenu } from "./UserMenu";
+import { WishlistButton } from "./WishlistButton";
 
 const nav = [
   { label: "Men", href: "/shop?dept=men" },
@@ -33,6 +35,7 @@ export function SiteHeader({ user }: { user?: { name?: string | null; email?: st
         </nav>
 
         <div className="flex items-center gap-1 lg:gap-5">
+          <WishlistButton />
           <BagButton />
           {/* mobile: profile bubble */}
           <Link href={user ? "/account" : "/login"} aria-label={user ? "My account" : "Sign in"} className="grid size-8 place-items-center rounded-pill bg-black text-white lg:hidden">
@@ -41,7 +44,7 @@ export function SiteHeader({ user }: { user?: { name?: string | null; email?: st
           {/* desktop: text links */}
           <div className="hidden items-center gap-5 lg:flex">
             {user ? (
-              <Link href="/account" className="text-[13px] font-semibold uppercase tracking-wider hover:underline">{user.name?.split(" ")[0] ?? "Account"}</Link>
+              <UserMenu user={user} />
             ) : (
               <>
                 <Link href="/login" className="text-[13px] font-semibold uppercase tracking-wider text-ink-muted hover:text-black">Login</Link>

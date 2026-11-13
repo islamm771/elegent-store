@@ -5,13 +5,20 @@ import { Photo } from "@/features/home/Photo";
 import { useStore } from "./store";
 
 export function CartView() {
-  const { items, subtotal, setQty, remove } = useStore();
+  const { items, subtotal, setQty, remove, ready, signedIn, wishlist } = useStore();
+
+  // signed-in bags come from the database, so don't flash "empty" while they load
+  if (!ready) return <p className="text-[15px] leading-6 text-ink-muted" aria-live="polite">Loading your bag…</p>;
 
   if (items.length === 0) {
     return (
       <div className="flex flex-col items-start gap-4">
         <p className="text-[15px] leading-6 text-ink-muted">Your bag is empty.</p>
-        <Link href="/shop" className="rounded-field bg-black px-6 py-3 text-[13px] font-semibold uppercase tracking-[0.1em] text-white shadow-cta hover:bg-ink">Continue shopping</Link>
+        <div className="flex flex-wrap items-center gap-4">
+          <Link href="/shop" className="rounded-field bg-black px-6 py-3 text-[13px] font-semibold uppercase tracking-[0.1em] text-white shadow-cta hover:bg-ink">Continue shopping</Link>
+          <Link href="/wishlist" className="label-caps text-ink underline underline-offset-2">{wishlist.length ? `View wishlist (${wishlist.length})` : "View wishlist"}</Link>
+        </div>
+        {!signedIn && <p className="text-[13px] text-ink-muted">Have an account? <Link href="/login?callbackUrl=/cart" className="underline underline-offset-2">Sign in</Link> to see your saved bag.</p>}
       </div>
     );
   }
@@ -46,6 +53,10 @@ export function CartView() {
         <p className="eyebrow text-accent">Order summary</p>
         <p className="mt-3 flex justify-between text-[15px]"><span>Subtotal</span><b>${subtotal.toFixed(2)}</b></p>
         <p className="mt-1 text-[13px] text-ink-muted">Shipping and taxes are calculated at checkout.</p>
+        <p className="mt-3 text-[13px] text-ink-muted">
+          {signedIn ? "Your bag is saved to your account." : <>Your bag is stored on this device. <Link href="/login?callbackUrl=/cart" className="text-ink underline underline-offset-2">Sign in</Link> to keep it across devices.</>}
+        </p>
+        <Link href="/wishlist" className="label-caps mt-3 inline-block text-ink underline underline-offset-2">Go to wishlist{wishlist.length ? ` (${wishlist.length})` : ""}</Link>
         <button type="button" disabled className="mt-5 w-full rounded-field bg-black px-6 py-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-white opacity-50">Checkout — coming soon</button>
       </aside>
     </div>

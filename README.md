@@ -36,7 +36,7 @@ Shortcut for the three database steps: `npm run db:setup`. Generate a secret wit
 | Home | `/` | hero, categories (real counts), most-reviewed pieces, editorial, newsletter (`/api/newsletter`) |
 | Shop | `/shop` | filters, sort, search, pagination — all in the URL and run by the database |
 | Product | `/shop/<slug>` | gallery + zoom, colour/size, size guide, "Complete the look" recommendations, reviews |
-| Bag / Wishlist | `/cart` `/wishlist` | stored in the browser (localStorage), per device |
+| Bag / Wishlist | `/cart` `/wishlist` | signed in: saved in the database (`CartItem` / `WishlistItem`, linked to the `User`) via `/api/cart` and `/api/wishlist`; guest: browser localStorage, merged into the account at sign-in |
 | Auth | `/login` `/register` | "Remember for 30 days" (30-day vs 24-hour session) |
 | Password reset | `/forgot-password` `/reset-password` | emailed one-hour link, used once, only a hash is stored |
 | Account | `/account` | profile, password, sizing profile, saved addresses (orders: empty state) |
@@ -52,7 +52,7 @@ Shortcut for the three database steps: `npm run db:setup`. Generate a secret wit
 - **Not built:** checkout and orders, `/terms` and `/privacy` (placeholders), an admin UI (use the API), real shoe / kids sizes.
 - After a password reset, sessions already open on other devices stay valid until they expire (JWT sessions).
 - No rate limiting except the per-account limit on reset emails.
-- Wishlist and bag are not synced between devices.
+- Guests' bag and wishlist stay on their device until they sign in.
 
 ## Layout
 ```
