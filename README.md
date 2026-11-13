@@ -1,74 +1,67 @@
-# Elegent store — auth (login + register), no Chakra
+# Elegent store
 
-Next.js 15 (App Router) · TypeScript · Tailwind v4 · NextAuth v4 (credentials) · Prisma 7 + PostgreSQL (Neon, `@prisma/adapter-pg`) · bcrypt.
-UI comes from our own kit in `src/ui` + `src/styles/tokens.css` (built from the "New Elegant" Figma file).
+Fashion boutique built from the "New Elegant" Figma file — custom UI kit (no Chakra), real database, auth, shop, cart and account.
 
-## Requirements
-Node.js 20.19+ (22 recommended). Prisma is pinned to the 7.x line: `prisma@latest` on npm is now the Prisma 8 release candidate, which is a different API — don't run `npm i prisma@latest`.
+**Stack:** Next.js 15 (App Router) · TypeScript · Tailwind v4 · NextAuth v4 (credentials, optional Google) · Prisma 7 + PostgreSQL (Neon) · bcrypt · Nodemailer.
 
-## Run
+## Quick start
+Needs Node.js 20.19+ (22 recommended).
 ```bash
 npm install                 # also runs `prisma generate`
-cp .env.example .env        # fill DATABASE_URL, DIRECT_URL, NEXTAUTH_SECRET
+cp .env.example .env        # then fill it in (table below)
 npm run db:push             # creates the tables
-npm run db:seed             # loads the 17 catalogue products into the Product table (safe to re-run)
+npm run db:seed             # loads 50 sample products (safe to re-run)
 npm run dev                 # http://localhost:3000
 ```
+Shortcut for the three database steps: `npm run db:setup`. Generate a secret with `openssl rand -base64 32`.
+> Don't run `npm i prisma@latest` — that is the Prisma 8 release candidate (a different API). This project is on Prisma 7.
 
-## Product table
-`prisma/schema.prisma` has a `Product` model and `prisma/seed.ts` fills it from `src/features/shop/catalog.ts` (upsert by `slug`, so re-running never duplicates; it does reset any product you edited in the database back to the catalogue values). Prices are stored in cents. The storefront pages still read the in-code catalogue until they are switched to the database.
+## Environment variables
+| Variable | Required | What for |
+|---|---|---|
+| `DATABASE_URL` | yes | Neon **pooled** connection string (used by the app) |
+| `DIRECT_URL` | yes | Neon **direct** connection string (used by `db:push` / `db:seed`) |
+| `NEXTAUTH_SECRET` | yes | signs the session cookie |
+| `NEXTAUTH_URL` | yes | site URL, e.g. `http://localhost:3000` (also used in reset-password links) |
+| `ADMIN_EMAILS` | for admin | comma-separated emails allowed to create/edit/delete products via the API |
+| `SMTP_HOST` `SMTP_PORT` `SMTP_USER` `SMTP_PASS` `MAIL_FROM` | for reset emails | Gmail: enable 2-step verification, then create an **App password**. With no SMTP set, the reset link is printed in the server console in development |
+| `GOOGLE_CLIENT_ID` `GOOGLE_CLIENT_SECRET` | optional | shows the Google button on login/register |
 
-## What works
-- `/register` → `POST /api/register` (validates, lowercases email, bcrypt-12, 409 on duplicate email) → redirects to `/login`
-- `/login` → NextAuth credentials. "Remember for 30 days" ON = 30-day token, OFF = 24h (`src/lib/auth.ts`)
-- `/account` is protected by `src/middleware.ts`; unauthenticated users go to `/login?callbackUrl=/account`
-- Google button appears only when `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` are set (Apple is not wired)
+## Scripts
+`dev` · `build` · `start` · `typecheck` · `db:generate` · `db:push` · `db:seed` · `db:studio` (Prisma Studio on :5555) · `db:setup`
 
-## Home page (`/`)
-Sections: header (announcement bar + nav) · hero · categories (tabs) · curated product grid · editorial banner · value props · newsletter · footer · mobile tab bar.
-- Catalogue is placeholder data in `src/features/home/data.ts` (swap for Prisma queries later).
-- Newsletter form → `POST /api/newsletter` → `Subscriber` table (run `npm run db:push` after pulling this version).
-- Wishlist heart and quick-add are UI-only for now (no cart/wishlist backend yet).
-- Photos: `public/images/home/` (see the README there). Tonal placeholders show until they exist.
+## What's in it
+| Area | Route | Notes |
+|---|---|---|
+| Home | `/` | hero, categories (real counts), most-reviewed pieces, editorial, newsletter (`/api/newsletter`) |
+| Shop | `/shop` | filters, sort, search, pagination — all in the URL and run by the database |
+| Product | `/shop/<slug>` | gallery + zoom, colour/size, size guide, "Complete the look" recommendations, reviews |
+| Bag / Wishlist | `/cart` `/wishlist` | stored in the browser (localStorage), per device |
+| Auth | `/login` `/register` | "Remember for 30 days" (30-day vs 24-hour session) |
+| Password reset | `/forgot-password` `/reset-password` | emailed one-hour link, used once, only a hash is stored |
+| Account | `/account` | profile, password, sizing profile, saved addresses (orders: empty state) |
+| Products API | `/api/products` | public list/detail, admin create/update/delete — see `docs/products-api.md` |
 
-## Shop (`/shop`)
-Filters, sorting, search and pagination live in the URL (shareable, rendered on the server): `?dept=men|women|kids|sale|trends`, `cat`, `color`, `size`, `material`, `max`, `oeko`, `q`, `sort`, `view=list`, `page`.
-- Catalogue = 12 placeholder products in `src/features/shop/catalog.ts` (swap for Prisma later); query logic in `query.ts`.
-- Cart + wishlist are client-side (localStorage) via `src/features/shop/store.tsx`; `/cart` shows the bag. Checkout is not built.
-- Photos: `public/images/shop/<product-id>.jpg` (see the README there).
+## Data
+- **Products** live in the `Product` table. `prisma/seed.ts` fills it from `src/features/shop/catalog.ts` (17) + `prisma/more-products.ts` (33). Re-seeding resets products to those values, so don't re-seed after you start editing products in the database.
+- Colours, sizes, categories and materials are fixed lists in `src/features/shop/catalog.ts` (the API validates against them).
+- Prices are stored in **cents**.
+- Photos are not included: pages show a tonal placeholder until files exist in `public/images/` — see the README in `home/` and `shop/` there (`shop/<slug>.jpg`, `-2`…`-4`).
 
-## Product page (`/shop/<id>`)
-Works for every product in the catalogue: gallery (thumbnails + hover zoom on desktop), colour/size pickers with a size-guide dialog, quantity, add to bag / instant checkout (adds to the bag and opens `/cart`), accordions, "Complete the look" pairings, and reviews.
-- Copy for the featured dress (`square-neck-buttoned-linen-dress`) comes from Figma; other products get generated placeholder copy (`src/features/shop/details.ts`). Written reviews exist only for the featured dress.
-- Gallery photos: `/images/shop/<id>.jpg`, `<id>-2.jpg`, `<id>-3.jpg`, `<id>-4.jpg`; pairings: `pair-*.jpg`.
-
-## Wishlist (`/wishlist`)
-There is no Wishlist frame in the Figma file, so it reuses the Shop card/grid and tokens. Hearts anywhere (Home, Shop, product page) feed one list stored in the browser (localStorage), so it is per device and works without signing in. Features: move all to bag, clear all, "Most loved" suggestions when empty, and a count badge on the mobile tab bar.
-- The 4 products on the Home page now live in the shop catalogue too, so they can be saved, opened and bought like any other piece.
-- To sync the wishlist across devices later, add a `WishlistItem` model and mirror `toggleSaved` in `src/features/shop/store.tsx`.
-
-## Account (`/account`)
-Protected page built from the Figma Profile design, on real user data. Tabs: `?tab=profile|orders|sizing|addresses|security`.
-- Profile: change name / phone / newsletter (`PATCH /api/account`; the session picks up the new name).
-- Security: change password (`POST /api/account/password`, checks the current one, bcrypt-12).
-- Sizing profile (bust / waist / hip / inseam + default size) and up to 5 saved addresses, stored as JSON columns on `User` — run `npm run db:push` after pulling this version.
-- Orders is an empty state until an Orders model exists. Wishlist / bag counters are read from the browser store.
-- Accounts created with Google have no database row, so they see a read-only notice instead of the forms.
-
-## Not built yet
-`/forgot-password`, `/terms`, `/privacy` are placeholders (the links exist in the UI).
-
-## Images (optional)
-Put the Figma photos in `public/brand/`: `auth-hero.jpg` (login) and `register-hero.jpg` (register). Pages render without them.
+## Not built yet / known limits
+- **Not built:** checkout and orders, `/terms` and `/privacy` (placeholders), an admin UI (use the API), real shoe / kids sizes.
+- After a password reset, sessions already open on other devices stay valid until they expire (JWT sessions).
+- No rate limiting except the per-account limit on reset emails.
+- Wishlist and bag are not synced between devices.
 
 ## Layout
 ```
-prisma/schema.prisma        User model
-prisma.config.ts            CLI config (uses DIRECT_URL for db push / migrate)
-src/generated/prisma        generated client (git-ignored, created by `prisma generate`)
-src/lib/{auth,db,validation,password,cn}.ts
-src/ui/                     Button, TextField/PasswordInput, Checkbox, Divider, Badge, StrengthMeter, Logo, icons
-src/features/auth/          AuthShell, AuthHero, RegisterHero, TrustStrip, SocialAuth, LoginForm, RegisterForm
-src/app/(auth)/{login,register}/page.tsx
-src/app/api/{auth/[...nextauth],register}/route.ts
+prisma/            schema.prisma, seed.ts, more-products.ts
+prisma.config.ts   Prisma CLI config (uses DIRECT_URL)
+docs/              products-api.md
+src/app/           pages + API routes   (auth)/ login, register, forgot/reset password
+src/features/      home · shop · shell · auth · account · wishlist
+src/ui/            design-system components (Button, TextField, Checkbox, …) + icons
+src/styles/        tokens.css (colours, radii, shadows, type roles)
+src/lib/           auth, db, mail, products, shop-data, validation, …
 ```
