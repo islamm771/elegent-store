@@ -1,7 +1,7 @@
 "use client";
-import Link from "next/link";
-import { MinusIcon, PlusIcon, XIcon } from "@/ui";
 import { Photo } from "@/features/home/Photo";
+import { MinusIcon, PlusIcon, XIcon } from "@/ui";
+import Link from "next/link";
 import { useStore } from "./store";
 
 export function CartView() {
@@ -28,7 +28,7 @@ export function CartView() {
       <ul className="flex flex-col divide-y divide-line">
         {items.map((i) => (
           <li key={i.key} className="flex gap-4 py-4">
-            <Photo src={i.image} tone={i.tone} alt={i.name} className="h-28 w-24 shrink-0 rounded-[4px]" />
+            <Photo src={i.image} tone={i.tone} alt={i.name} className="h-28 w-24 shrink-0 rounded-sm" />
             <div className="flex flex-1 flex-col justify-between">
               <div className="flex items-start justify-between gap-3">
                 <div>
@@ -57,7 +57,7 @@ export function CartView() {
           {signedIn ? "Your bag is saved to your account." : <>Your bag is stored on this device. <Link href="/login?callbackUrl=/cart" className="text-ink underline underline-offset-2">Sign in</Link> to keep it across devices.</>}
         </p>
         <Link href="/wishlist" className="label-caps mt-3 inline-block text-ink underline underline-offset-2">Go to wishlist{wishlist.length ? ` (${wishlist.length})` : ""}</Link>
-        <button type="button" disabled className="mt-5 w-full rounded-field bg-black px-6 py-4 text-[13px] font-semibold uppercase tracking-[0.1em] text-white opacity-50">Checkout — coming soon</button>
+        <button type="button" disabled className="mt-5 w-full rounded-field bg-black px-6 py-4 text-[13px] font-semibold uppercase tracking-widest text-white opacity-50">Checkout — coming soon</button>
       </aside>
     </div>
   );

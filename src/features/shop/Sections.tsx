@@ -29,7 +29,7 @@ export function MobileLookbook() {
       <div className="flex items-center justify-between rounded-[8px] bg-field p-4 shadow-hairline">
         <div className="pr-2">
           <p className="label-caps text-accent">Autumn lookbook</p>
-          <h2 className="pt-0.5 font-serif text-2xl font-semibold leading-[30px]">The Pure Linen<br />Capsule</h2>
+          <h2 className="pt-0.5 font-serif text-2xl font-semibold leading-7.5">The Pure Linen<br />Capsule</h2>
           <p className="pt-1 text-[13px] leading-5 text-ink-muted">Earthy silhouettes tailored for unhurried days.</p>
         </div>
         <span className="grid size-14 shrink-0 place-items-center rounded-pill bg-[#fed9b9] shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)]"><LeafIcon width={22} height={22} /></span>
@@ -51,8 +51,8 @@ export function CapsuleHero({ query, total }: { query: ShopQuery; total: number 
         <div className="flex items-end justify-between pt-1">
           <div className="flex max-w-2xl flex-col items-start gap-1 pt-1">
             <p className="eyebrow flex items-center gap-1 bg-field px-2 py-1 text-accent"><span className="size-1.5 rounded-pill bg-accent" /> Autumn / Winter series ’25</p>
-            <h1 className="font-serif text-5xl font-medium leading-[56px] tracking-tight">The Autumn Linen Capsule</h1>
-            <p className="text-lg leading-[29px] text-ink-muted">Earthy silhouettes tailored for unhurried days, crafted with 100% organic European flax. Rooted in warm tactile hues and architectural drape.</p>
+            <h1 className="font-serif text-5xl font-medium leading-14 tracking-tight">The Autumn Linen Capsule</h1>
+            <p className="text-lg leading-7.25 text-ink-muted">Earthy silhouettes tailored for unhurried days, crafted with 100% organic European flax. Rooted in warm tactile hues and architectural drape.</p>
           </div>
           <div className="flex items-center gap-4 bg-field px-4 py-2">
             <div className="text-right">
@@ -92,7 +92,7 @@ export function SustainabilityBanner() {
       <div className="bg-sand/60 px-6 py-12">
         <div className="mx-auto grid max-w-360 grid-cols-12 items-center gap-7">
           <div className="relative col-span-5">
-            <Photo src="/images/shop/sustainability.jpg" tone="#b9a584" alt="Certified European flax linen" className="h-[373px] shadow-cta" />
+            <Photo src="/images/shop/sustainability.jpg" tone="#b9a584" alt="Certified European flax linen" className="h-93.25 shadow-cta" />
             <div className="absolute -bottom-4 -right-4 flex flex-col gap-1 bg-black p-4 shadow-lg">
               <p className="font-serif text-2xl font-bold leading-6 text-white">100%</p>
               <p className="text-[11px] font-semibold uppercase tracking-widest text-field">Zero synthetics</p>
@@ -100,8 +100,8 @@ export function SustainabilityBanner() {
           </div>
           <div className="col-span-7 flex flex-col pl-7">
             <p className="eyebrow flex items-center gap-1 pb-1 text-accent"><LeafIcon width={16} height={16} /> Responsible luxury charter</p>
-            <h2 className="font-serif text-5xl font-medium leading-[56px] tracking-tight">Consciously Woven for<br />Generational Wear</h2>
-            <p className="max-w-xl pt-2 text-lg leading-[29px] text-ink-muted">Every piece in this Autumn Capsule is spun from Certified European Flax grown without artificial irrigation or genetically modified seeds. Naturally thermoregulating, antimicrobial, and softer with every laundering cycle.</p>
+            <h2 className="font-serif text-5xl font-medium leading-14 tracking-tight">Consciously Woven for<br />Generational Wear</h2>
+            <p className="max-w-xl pt-2 text-lg leading-7.25 text-ink-muted">Every piece in this Autumn Capsule is spun from Certified European Flax grown without artificial irrigation or genetically modified seeds. Naturally thermoregulating, antimicrobial, and softer with every laundering cycle.</p>
             <div className="mt-7 flex gap-4 bg-field/70 p-4">
               {facts.map(([t, d]) => (
                 <div key={t} className="flex-1"><h3 className="text-base font-bold leading-6">{t}</h3><p className="text-[13px] leading-5 text-ink-muted">{d}</p></div>

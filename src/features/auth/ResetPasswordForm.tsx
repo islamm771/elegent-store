@@ -1,8 +1,8 @@
 "use client";
+import { ArrowRightIcon, Button, LockIcon, StrengthMeter, TextField } from "@/ui";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
-import { ArrowRightIcon, Button, LockIcon, StrengthMeter, TextField } from "@/ui";
 
 export function ResetPasswordForm({ token }: { token: string }) {
   const router = useRouter();
@@ -39,7 +39,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
       <div role="alert" className="flex flex-col items-start gap-3">
         <h2 className="font-serif text-2xl font-semibold leading-8">This link is no longer valid</h2>
         <p className="text-[15px] leading-6 text-ink-muted">It may have expired or already been used. Request a new one and we’ll email it right away.</p>
-        <Link href="/forgot-password" className="rounded-field bg-black px-6 py-3 text-[13px] font-semibold uppercase tracking-[0.1em] text-white shadow-cta hover:bg-ink">Request a new link</Link>
+        <Link href="/forgot-password" className="rounded-field bg-black px-6 py-3 text-[13px] font-semibold uppercase tracking-widest text-white shadow-cta hover:bg-ink">Request a new link</Link>
       </div>
     );
   }

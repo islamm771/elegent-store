@@ -1,6 +1,6 @@
 "use client";
-import { forwardRef, useId, useState, type InputHTMLAttributes, type ReactNode } from "react";
 import { cn } from "@/lib/cn";
+import { forwardRef, useId, useState, type InputHTMLAttributes, type ReactNode } from "react";
 import { EyeIcon, EyeOffIcon } from "./icons";
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -58,7 +58,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
   return (
     <div className="flex flex-col gap-1.5 lg:gap-2">
       <div className="flex items-center justify-between">
-        <label htmlFor={fid} className="label-caps text-ink-muted lg:text-[13px] lg:leading-4 lg:tracking-[0.05em] lg:text-ink">{label}</label>
+        <label htmlFor={fid} className="label-caps text-ink-muted lg:text-[13px] lg:leading-4 lg:tracking-wider lg:text-ink">{label}</label>
         {aside}
       </div>
       {type === "password"

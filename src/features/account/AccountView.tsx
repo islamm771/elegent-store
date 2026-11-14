@@ -1,12 +1,11 @@
+import { cn } from "@/lib/cn";
+import { ChevronRightIcon, HeartIcon, LockIcon, PackageIcon, PinIcon, RulerIcon, UserIcon } from "@/ui";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ChevronRightIcon, HeartIcon, LockIcon, PackageIcon, PinIcon, RulerIcon, UserIcon } from "@/ui";
-import { cn } from "@/lib/cn";
-import { SIZES } from "@/lib/account";
-import { SignOutButton } from "./SignOutButton";
 import { AddressesManager, PasswordForm, ProfileForm, SizingForm } from "./Forms";
 import { Avatar, Card, StatPills } from "./Parts";
-import { initials, memberSince, type AccountUser, type Tab } from "./types";
+import { SignOutButton } from "./SignOutButton";
+import { memberSince, type AccountUser, type Tab } from "./types";
 
 interface Props { tab: Tab; user: AccountUser | null; fallback: { name: string; email: string }; dbDown: boolean }
 
@@ -29,7 +28,7 @@ function OrdersEmpty() {
       <div className="flex flex-col items-start gap-3">
         <span className="grid size-12 place-items-center rounded-pill bg-[#fed9b9]"><PackageIcon width={20} height={20} /></span>
         <p className="max-w-md text-[15px] leading-6 text-ink-muted">When you place an order, you’ll be able to follow its courier, download the invoice and reorder from here.</p>
-        <Link href="/shop" className="rounded-field bg-black px-6 py-3 text-[13px] font-semibold uppercase tracking-[0.1em] text-white shadow-cta hover:bg-ink">Browse the capsule</Link>
+        <Link href="/shop" className="rounded-field bg-black px-6 py-3 text-[13px] font-semibold uppercase tracking-widest text-white shadow-cta hover:bg-ink">Browse the capsule</Link>
       </div>
     </Card>
   );
@@ -45,9 +44,9 @@ function SizingSummary({ user }: { user: AccountUser }) {
         <>
           <ul className="grid grid-cols-4 gap-2">
             {cells.map(([l, v]) => (
-              <li key={l} className="flex flex-col items-center rounded-[4px] bg-white py-3 shadow-hairline">
-                <span className="text-[10px] uppercase tracking-[0.05em] text-ink-subtle">{l}</span>
-                <span className="text-lg font-semibold leading-[26px]">{v ?? "—"}{v ? <small className="pl-0.5 text-[13px] font-normal text-ink-subtle">cm</small> : null}</span>
+              <li key={l} className="flex flex-col items-center rounded-sm bg-white py-3 shadow-hairline">
+                <span className="text-[10px] uppercase tracking-wider text-ink-subtle">{l}</span>
+                <span className="text-lg font-semibold leading-6.5">{v ?? "—"}{v ? <small className="pl-0.5 text-[13px] font-normal text-ink-subtle">cm</small> : null}</span>
               </li>
             ))}
           </ul>
@@ -68,7 +67,7 @@ function AddressesSummary({ user }: { user: AccountUser }) {
       ) : (
         <ul className="flex flex-col gap-2">
           {user.addresses.slice(0, 2).map((a) => (
-            <li key={a.id} className="rounded-[4px] bg-white p-3 shadow-hairline">
+            <li key={a.id} className="rounded-sm bg-white p-3 shadow-hairline">
               <p className="flex items-center justify-between text-base font-semibold leading-6">{a.label}{a.isDefault && <span className="rounded-[2px] bg-[#fed9b9] px-2 text-[9px] font-bold uppercase leading-5 text-[#795d44]">Default</span>}</p>
               <p className="text-[13px] leading-5 text-ink-muted">{a.line1}, {a.city}, {a.country}</p>
             </li>
@@ -102,7 +101,7 @@ function MobileOverview({ user, name, email }: { user: AccountUser | null; name:
           <div className="min-w-0">
             <h1 className="truncate font-serif text-2xl font-semibold leading-8">{name}</h1>
             <p className="truncate text-[13px] leading-5 text-ink-muted">{email}</p>
-            {user && <p className="mt-2 w-fit rounded-pill bg-accent px-2.5 py-0.5 text-[11px] font-semibold uppercase leading-[14px] tracking-[0.05em] text-white">Member since {memberSince(user.createdAt)}</p>}
+            {user && <p className="mt-2 w-fit rounded-pill bg-accent px-2.5 py-0.5 text-[11px] font-semibold uppercase leading-3.5 tracking-wider text-white">Member since {memberSince(user.createdAt)}</p>}
           </div>
         </div>
         <StatPills variant="mobile" />
@@ -114,7 +113,7 @@ function MobileOverview({ user, name, email }: { user: AccountUser | null; name:
           <>
             <Row to={href("profile")} icon={UserIcon} title="Profile Details" text="Name, phone & preferences" />
             <Row to={href("orders")} icon={PackageIcon} title="Order History" text="Archived orders & returns" meta="0 orders" />
-            <Row to={href("sizing")} icon={RulerIcon} title="Saved Measurements & Fit" text="Tailored sizing profile" meta={m?.size ? <span className="rounded-[6px] bg-line px-2 text-[11px] text-ink">{m.size.toUpperCase()}</span> : "Not set"} />
+            <Row to={href("sizing")} icon={RulerIcon} title="Saved Measurements & Fit" text="Tailored sizing profile" meta={m?.size ? <span className="rounded-md bg-line px-2 text-[11px] text-ink">{m.size.toUpperCase()}</span> : "Not set"} />
             <Row to="/wishlist" icon={HeartIcon} title="My Wardrobe & Wishlist" text="Saved edits for future seasons" />
             <Row to={href("addresses")} icon={PinIcon} title="Shipping Addresses" text="Where we deliver" meta={`${user.addresses.length} saved`} />
             <Row to={href("security")} icon={LockIcon} title="Account Security" text="Change your password" />
@@ -140,13 +139,13 @@ function DesktopBanner({ user, name, email }: { user: AccountUser | null; name: 
         <Avatar name={name} className="size-24 text-3xl shadow-[0_0_0_4px_#f5ede1,0_4px_6px_-1px_rgba(0,0,0,0.1)]" />
         <div className="flex flex-col gap-1">
           <p className="eyebrow text-accent">{user ? `Member · Client ID #EL-${user.id.slice(-4).toUpperCase()}` : "Member"}</p>
-          <h1 className="font-serif text-5xl font-medium leading-[56px] tracking-[-0.025em]">{name}</h1>
+          <h1 className="font-serif text-5xl font-medium leading-14 tracking-tight">{name}</h1>
           <p className="text-[13px] leading-5 text-ink-muted">{email}{user && <> · Patron since {memberSince(user.createdAt)}</>}</p>
         </div>
       </div>
-      <div className="relative hidden max-w-sm rounded-[4px] bg-field p-4 xl:block">
+      <div className="relative hidden max-w-sm rounded-sm bg-field p-4 xl:block">
         <p className="eyebrow pb-1 text-accent">Atelier privileges active</p>
-        <p className="text-[13px] leading-[21px] text-ink-muted">Complimentary in-house alterations, white-glove courier handling and private salon styling sessions.</p>
+        <p className="text-[13px] leading-5.25 text-ink-muted">Complimentary in-house alterations, white-glove courier handling and private salon styling sessions.</p>
       </div>
       <div className="relative"><StatPills variant="desktop" /></div>
     </section>
@@ -165,13 +164,13 @@ function Sidebar({ tab, user }: { tab: Tab; user: AccountUser | null }) {
   ];
   return (
     <div className="flex flex-col gap-4 rounded-[8px] bg-surface p-4 shadow-hairline">
-      <p className="px-2 text-[10px] uppercase tracking-[0.1em] text-ink-subtle">Salon management</p>
+      <p className="px-2 text-[10px] uppercase tracking-widest text-ink-subtle">Salon management</p>
       <nav aria-label="Account" className="flex flex-col gap-1">
         {items.map(({ id, label, icon: Icon, badge, to }) => {
           const on = id === tab;
           return (
             <Link key={id} href={to} aria-current={on ? "page" : undefined}
-              className={cn("flex items-center justify-between rounded-[4px] px-2 py-2.5 text-[15px] font-semibold tracking-[0.02em]", on ? "bg-black text-white shadow-hairline" : "text-ink-muted hover:bg-field")}>
+              className={cn("flex items-center justify-between rounded-sm px-2 py-2.5 text-[15px] font-semibold tracking-[0.02em]", on ? "bg-black text-white shadow-hairline" : "text-ink-muted hover:bg-field")}>
               <span className="flex items-center gap-2"><Icon width={15} height={15} />{label}</span>
               {badge && <span className="rounded-pill bg-[#fed9b9] px-2 text-[10px] font-bold text-[#795d44]">{badge}</span>}
             </Link>
@@ -210,7 +209,7 @@ export function AccountView({ tab, user, fallback, dbDown }: Props) {
   }
 
   return (
-    <div className="mx-auto max-w-[1440px] px-4 lg:px-6 lg:py-7">
+    <div className="mx-auto max-w-360 px-4 lg:px-6 lg:py-7">
       <DesktopBanner user={user} name={name} email={email} />
       {tab === "overview" && <MobileOverview user={user} name={name} email={email} />}
       <div className="lg:mt-7 lg:grid lg:grid-cols-12 lg:gap-7">

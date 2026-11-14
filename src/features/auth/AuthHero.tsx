@@ -13,7 +13,7 @@ export function AuthHero({
   return (
     <div className="relative h-full text-canvas">
       <div className="absolute inset-0 bg-accent bg-cover bg-center" style={{ backgroundImage: `url(${image})` }} />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 via-50% to-transparent" />
+      <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/25 via-50% to-transparent" />
       <div className="absolute inset-0 bg-accent/10 mix-blend-multiply" />
 
       <div className="relative flex h-full flex-col justify-between p-14">
@@ -28,7 +28,7 @@ export function AuthHero({
 
         <figure className="flex max-w-xl flex-col gap-5">
           <span className="h-0.5 w-12 bg-peach" />
-          <blockquote className="font-serif text-[32px] italic leading-[44px] tracking-[-0.025em]">{quote}</blockquote>
+          <blockquote className="font-serif text-[32px] italic leading-11 tracking-tight">{quote}</blockquote>
           <figcaption className="eyebrow tracking-[0.2em] text-sand">{attribution}</figcaption>
         </figure>
       </div>

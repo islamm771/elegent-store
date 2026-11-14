@@ -1,11 +1,11 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { MAX_ADDRESSES, SIZES, validateProfile, type Address, type Measurements } from "@/lib/account";
+import { cn } from "@/lib/cn";
+import { Button, Checkbox, PlusIcon, StrengthMeter, TextField } from "@/ui";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import toast from "react-hot-toast";
-import { Button, Checkbox, PlusIcon, StrengthMeter, TextField } from "@/ui";
-import { cn } from "@/lib/cn";
-import { MAX_ADDRESSES, SIZES, validateProfile, type Address, type Measurements } from "@/lib/account";
 import { FieldMsg } from "./Parts";
 import type { AccountUser } from "./types";
 
@@ -96,7 +96,7 @@ export function SizingForm({ initial }: { initial: Measurements }) {
         <div className="flex gap-2">
           {SIZES.map((s) => (
             <button key={s} type="button" aria-pressed={size === s} onClick={() => setSize(size === s ? "" : s)}
-              className={cn("h-11 flex-1 rounded-[2px] text-[13px] font-semibold uppercase tracking-[0.05em]", size === s ? "bg-black text-white shadow-cta" : "bg-field text-ink hover:bg-line")}>{s}</button>
+              className={cn("h-11 flex-1 rounded-[2px] text-[13px] font-semibold uppercase tracking-wider", size === s ? "bg-black text-white shadow-cta" : "bg-field text-ink hover:bg-line")}>{s}</button>
           ))}
         </div>
       </fieldset>
@@ -142,13 +142,13 @@ export function AddressesManager({ initial }: { initial: Address[] }) {
       {list.length === 0 && !adding && <p className="text-[15px] leading-6 text-ink-muted">No saved addresses yet.</p>}
       <ul className="flex flex-col gap-2">
         {list.map((a) => (
-          <li key={a.id} className="flex flex-col gap-1 rounded-[4px] bg-white p-3 shadow-hairline">
+          <li key={a.id} className="flex flex-col gap-1 rounded-sm bg-white p-3 shadow-hairline">
             <div className="flex items-center justify-between gap-2">
               <p className="text-base font-semibold leading-6">{a.label}</p>
               {a.isDefault && <span className="rounded-[2px] bg-[#fed9b9] px-2 py-0.5 text-[9px] font-bold uppercase leading-5 text-[#795d44]">Default</span>}
             </div>
             <p className="text-[13px] leading-5 text-ink-muted">{[a.line1, a.line2].filter(Boolean).join(", ")}<br />{[a.postal, a.city].filter(Boolean).join(" ")}, {a.country}</p>
-            <div className="flex gap-4 pt-1 text-[11px] font-semibold uppercase tracking-[0.05em]">
+            <div className="flex gap-4 pt-1 text-[11px] font-semibold uppercase tracking-wider">
               {!a.isDefault && <button type="button" disabled={busy} onClick={() => persist(list.map((x) => ({ ...x, isDefault: x.id === a.id })), "Default address updated")} className="text-accent underline underline-offset-2">Set as default</button>}
               <button type="button" disabled={busy} onClick={() => persist(list.filter((x) => x.id !== a.id), "Address removed")} className="text-ink-muted underline underline-offset-2">Remove</button>
             </div>
@@ -157,7 +157,7 @@ export function AddressesManager({ initial }: { initial: Address[] }) {
       </ul>
 
       {adding ? (
-        <form onSubmit={add} noValidate className="flex flex-col gap-3 rounded-[4px] bg-field p-4">
+        <form onSubmit={add} noValidate className="flex flex-col gap-3 rounded-sm bg-field p-4">
           <TextField label="Label" placeholder="Home, Studio…" value={draft.label} onChange={set("label")} />
           <TextField label="Street address" autoComplete="address-line1" value={draft.line1} onChange={set("line1")} />
           <TextField label="Apartment, floor, etc." autoComplete="address-line2" value={draft.line2} onChange={set("line2")} aside={<span className="text-[11px] font-semibold lowercase text-ink-subtle">optional</span>} />
@@ -172,7 +172,7 @@ export function AddressesManager({ initial }: { initial: Address[] }) {
           </div>
         </form>
       ) : list.length < MAX_ADDRESSES ? (
-        <button type="button" onClick={() => setAdding(true)} className="flex items-center justify-center gap-2 rounded-field bg-field py-3 text-[11px] font-semibold uppercase tracking-[0.05em] hover:bg-line">
+        <button type="button" onClick={() => setAdding(true)} className="flex items-center justify-center gap-2 rounded-field bg-field py-3 text-[11px] font-semibold uppercase tracking-wider hover:bg-line">
           <PlusIcon width={12} height={12} strokeWidth={2.5} /> Add an address
         </button>
       ) : (

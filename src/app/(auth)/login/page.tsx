@@ -1,10 +1,11 @@
-import Link from "next/link";
-import { ArrowLeftIcon, LockIcon, Logo } from "@/ui";
 import { AuthHero } from "@/features/auth/AuthHero";
 import { AuthShell } from "@/features/auth/AuthShell";
 import { LoginForm } from "@/features/auth/LoginForm";
 import { TrustStrip } from "@/features/auth/TrustStrip";
+import LogoLink from "@/features/shell/LogoLink";
 import { getSocialProviders } from "@/lib/auth";
+import { ArrowLeftIcon, LockIcon } from "@/ui";
+import Link from "next/link";
 
 export const metadata = { title: "Sign in — Elegent" };
 
@@ -18,16 +19,16 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
         <Link href="/" className="eyebrow flex items-center gap-2 text-ink-muted hover:text-ink">
           <ArrowLeftIcon width={11} height={11} /> Back to boutique
         </Link>
-        <span className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.05em] text-accent">
+        <span className="flex items-center gap-2 text-[11px] font-semibold tracking-wider text-accent">
           <LockIcon width={10} height={12} /> SSL 256-Bit
         </span>
       </header>
 
-      <div className="mx-auto flex w-full max-w-[460px] flex-1 flex-col justify-center gap-7 py-2 lg:gap-8 lg:py-10">
+      <div className="mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-7 py-2 lg:gap-8 lg:py-10">
         <div className="flex flex-col items-center text-center">
-          <Logo />
-          <p className="eyebrow mt-2 text-accent lg:tracking-[0.3em]">Couture &amp; Lifestyle</p>
-          <h1 className="mt-3 font-serif text-[32px] font-medium leading-10 tracking-[-0.025em]">Welcome Back</h1>
+          <LogoLink />
+          <p className="eyebrow mt-4 text-accent lg:tracking-[0.3em]">Couture &amp; Lifestyle</p>
+          <h1 className="mt-3 font-serif text-[32px] font-medium leading-10 tracking-tight">Welcome Back</h1>
           <p className="mt-1 max-w-80 text-[15px] leading-6 text-ink-muted">
             Sign in to access your wishlist, orders, and curated private collections.
           </p>

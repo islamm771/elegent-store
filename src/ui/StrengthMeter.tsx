@@ -1,5 +1,5 @@
-import { passwordStrength } from "@/lib/password";
 import { cn } from "@/lib/cn";
+import { passwordStrength } from "@/lib/password";
 
 /** 4 segments. Mobile shows "Security score / label"; desktop shows the requirement hint instead. */
 export function StrengthMeter({ password }: { password: string }) {
@@ -15,7 +15,7 @@ export function StrengthMeter({ password }: { password: string }) {
           <span key={i} className={cn("h-full flex-1 rounded-pill transition-colors duration-300", i <= score ? "bg-accent" : "bg-line lg:bg-accent/30")} />
         ))}
       </div>
-      <p className="hidden text-[13px] leading-[16px] text-ink-muted/70 lg:block">
+      <p className="hidden text-[13px] leading-4 text-ink-muted/70 lg:block">
         Must include 8+ characters, one uppercase, and a special symbol.
       </p>
     </div>

@@ -16,7 +16,7 @@ export function NewsletterSection() {
         <div className="mx-auto max-w-360 px-4 lg:px-6">
           <div className="flex flex-col items-center gap-4 rounded-[8px] bg-sand px-8 py-16 text-center">
             <p className="eyebrow text-accent">The private salon</p>
-            <h2 className="font-serif text-5xl font-semibold leading-[56px] tracking-[-0.025em]">Join the Elegent Society</h2>
+            <h2 className="font-serif text-5xl font-semibold leading-14 tracking-tight">Join the Elegent Society</h2>
             <p className="max-w-2xl text-[15px] leading-6 text-ink-muted">
               Receive early private access to limited batch capsule drops, seasonal lookbooks, and invitations to private styling salons in Paris, Milan, and New York.
             </p>

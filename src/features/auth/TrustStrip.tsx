@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { BadgeCheckIcon, ShieldIcon, TruckIcon } from "@/ui";
+import Link from "next/link";
 
 export function TrustStrip() {
   return (
@@ -18,7 +18,7 @@ export function TrustStrip() {
           <li className="flex flex-col items-center gap-1"><TruckIcon /> Express dispatch</li>
           <li className="flex flex-col items-center gap-1"><ShieldIcon /> Concierge security</li>
         </ul>
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-1 px-1 text-[11px] font-semibold tracking-[0.05em]">
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-1 px-1 text-[11px] font-semibold tracking-wider">
           <span className="text-accent">© MMXXIV Maison Elegent. All rights reserved.</span>
           <span className="flex gap-6 whitespace-nowrap text-ink-muted">
             <Link href="/privacy" className="hover:text-ink">Privacy Policy</Link>
