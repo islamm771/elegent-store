@@ -51,6 +51,17 @@ export function UserMenu({ user }: Props) {
   // close after any navigation
   useEffect(() => setOpen(false), [path]);
 
+  // number of orders (re-read after each navigation, e.g. right after placing one)
+  const [orders, setOrders] = useState<number | null>(null);
+  useEffect(() => {
+    let off = false;
+    fetch("/api/orders/count", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: { count?: number } | null) => { if (!off && typeof d?.count === "number") setOrders(d.count); })
+      .catch(() => {});
+    return () => { off = true; };
+  }, [path]);
+
   // outside click + Escape
   useEffect(() => {
     if (!open) return;
@@ -73,7 +84,7 @@ export function UserMenu({ user }: Props) {
   }
 
   const stats = [
-    { label: "Orders", value: "0", href: "/account?tab=orders" }, // checkout/orders aren't built yet
+    { label: "Orders", value: orders === null ? "–" : String(orders), href: "/account?tab=orders" },
     { label: "Wishlist", value: ready ? String(wishlist.length) : "–", href: "/wishlist" },
     { label: "Bag", value: ready ? String(count) : "–", href: "/cart" },
   ];

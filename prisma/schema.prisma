@@ -21,6 +21,7 @@ model User {
 
   cartItems     CartItem[] // the shopping bag
   wishlistItems WishlistItem[]
+  orders        Order[]
 }
 
 /// One line in a user's shopping bag. Same product in a different colour/size is a different line.
@@ -107,7 +108,76 @@ model Product {
 
   cartItems     CartItem[]
   wishlistItems WishlistItem[]
+  orderItems    OrderItem[]
 
   @@index([category])
   @@index([isActive, createdAt])
+}
+
+enum PaymentMethod {
+  COD // cash on delivery
+  ONLINE // paid by card through Stripe Checkout
+}
+
+enum PaymentStatus {
+  PENDING // COD: collected by the courier on delivery · ONLINE: waiting for the customer to pay
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum OrderStatus {
+  PENDING // placed, waiting for payment (online) or for us to confirm (COD)
+  CONFIRMED
+  PACKED // hand-packaged, waiting for the courier
+  SHIPPED // out for delivery
+  DELIVERED
+  CANCELLED
+}
+
+model Order {
+  id            String        @id @default(cuid())
+  number        String        @unique // human readable, e.g. EL-7K2P9QXD
+  userId        String
+  status        OrderStatus   @default(PENDING)
+  paymentMethod PaymentMethod
+  paymentStatus PaymentStatus @default(PENDING)
+
+  subtotalCents Int
+  shippingCents Int
+  taxCents      Int           @default(0)
+  totalCents    Int
+
+  email    String
+  phone    String
+  shipping Json // { name, line1, line2, city, postal, country, notes }
+
+  stripeSessionId String?   @unique // Stripe Checkout Session of an ONLINE order
+  paidAt          DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  user  User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items OrderItem[]
+
+  @@index([userId, createdAt])
+}
+
+/// A frozen copy of what was bought: name, image and price are copied so later catalogue edits never rewrite an old order.
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  productId String? // null if the product was deleted afterwards
+  slug      String
+  name      String
+  image     String?
+  color     String  @default("")
+  size      String  @default("")
+  qty       Int
+  unitCents Int
+
+  order   Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([orderId])
 }

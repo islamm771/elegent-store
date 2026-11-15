@@ -157,7 +157,7 @@ export function AddressesManager({ initial }: { initial: Address[] }) {
       </ul>
 
       {adding ? (
-        <form onSubmit={add} noValidate className="flex flex-col gap-3 rounded-sm bg-field p-4">
+        <form onSubmit={add} noValidate className="flex flex-col gap-3 rounded-sm">
           <TextField label="Label" placeholder="Home, Studio…" value={draft.label} onChange={set("label")} />
           <TextField label="Street address" autoComplete="address-line1" value={draft.line1} onChange={set("line1")} />
           <TextField label="Apartment, floor, etc." autoComplete="address-line2" value={draft.line2} onChange={set("line2")} aside={<span className="text-[11px] font-semibold lowercase text-ink-subtle">optional</span>} />

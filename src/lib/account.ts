@@ -1,3 +1,4 @@
+import { Tab } from "@/features/account/types";
 import { isPhone } from "./validation";
 
 export const SIZES = ["xs", "s", "m", "l", "xl"] as const;
@@ -70,3 +71,5 @@ export function validateAddresses(v: unknown): Result<Address[]> {
   list.forEach((a, i) => { a.isDefault = i === (first === -1 ? 0 : first); }); // exactly one default
   return { value: list };
 }
+
+export const href = (t: Tab) => (t === "overview" ? "/account" : `/account?tab=${t}`);

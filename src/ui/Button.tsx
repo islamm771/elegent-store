@@ -1,5 +1,5 @@
-import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
 import { cn } from "@/lib/cn";
+import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
 
 type Variant = "primary" | "social";
 
@@ -17,7 +17,7 @@ const base =
 
 const variants: Record<Variant, string> = {
   primary: "bg-black px-6 py-4 text-[13px] leading-4 tracking-[0.14em] text-white shadow-cta hover:bg-ink lg:tracking-[0.2em]",
-  social: "label-caps bg-surface px-4 py-3 text-ink shadow-hairline hover:bg-field lg:py-3.5",
+  social: "label-caps bg-field px-4 py-3 text-ink hover:bg-sand lg:py-3.5",
 };
 
 function Spinner() {

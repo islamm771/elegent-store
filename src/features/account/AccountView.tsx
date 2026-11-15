@@ -1,16 +1,17 @@
+import { href } from "@/lib/account";
 import { cn } from "@/lib/cn";
 import { ChevronRightIcon, HeartIcon, LockIcon, PackageIcon, PinIcon, RulerIcon, UserIcon } from "@/ui";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import AddressesSummary from "./AddressesSummary";
 import { AddressesManager, PasswordForm, ProfileForm, SizingForm } from "./Forms";
+import OrdersCard from "./OrdersCard";
 import { Avatar, Card, StatPills } from "./Parts";
 import { SignOutButton } from "./SignOutButton";
-import { memberSince, type AccountUser, type Tab } from "./types";
+import SizingProfile from "./SizingProfile";
+import { memberSince, type AccountUser, type OrderSummary, type Tab } from "./types";
 
-interface Props { tab: Tab; user: AccountUser | null; fallback: { name: string; email: string }; dbDown: boolean }
-
-const href = (t: Tab) => (t === "overview" ? "/account" : `/account?tab=${t}`);
-const titles: Record<Exclude<Tab, "overview">, string> = { profile: "Profile details", orders: "Order vault", sizing: "Sizing profile", addresses: "Saved addresses", security: "Security" };
+interface Props { tab: Tab; user: AccountUser | null; fallback: { name: string; email: string }; dbDown: boolean; orders: OrderSummary[] }
 
 function Unavailable({ dbDown }: { dbDown: boolean }) {
   return (
@@ -18,62 +19,6 @@ function Unavailable({ dbDown }: { dbDown: boolean }) {
       <p className="text-[15px] leading-6 text-ink-muted">
         {dbDown ? "Something went wrong while loading your account. Please refresh the page in a moment." : "Your account was created with a social sign-in, so there are no saved profile details to edit here."}
       </p>
-    </Card>
-  );
-}
-
-function OrdersEmpty() {
-  return (
-    <Card eyebrow="Order vault" title="No orders yet">
-      <div className="flex flex-col items-start gap-3">
-        <span className="grid size-12 place-items-center rounded-pill bg-[#fed9b9]"><PackageIcon width={20} height={20} /></span>
-        <p className="max-w-md text-[15px] leading-6 text-ink-muted">When you place an order, you’ll be able to follow its courier, download the invoice and reorder from here.</p>
-        <Link href="/shop" className="rounded-field bg-black px-6 py-3 text-[13px] font-semibold uppercase tracking-widest text-white shadow-cta hover:bg-ink">Browse the capsule</Link>
-      </div>
-    </Card>
-  );
-}
-
-function SizingSummary({ user }: { user: AccountUser }) {
-  const m = user.measurements;
-  const cells = [["Bust", m.bust], ["Waist", m.waist], ["Hip", m.hip], ["Inseam", m.inseam]] as const;
-  const any = cells.some(([, v]) => v) || m.size;
-  return (
-    <Card eyebrow="Master tailor metrics" title="Custom Sizing Capsule" action={<Link href={href("sizing")} className="label-caps text-accent underline underline-offset-2">Edit</Link>}>
-      {any ? (
-        <>
-          <ul className="grid grid-cols-4 gap-2">
-            {cells.map(([l, v]) => (
-              <li key={l} className="flex flex-col items-center rounded-sm bg-white py-3 shadow-hairline">
-                <span className="text-[10px] uppercase tracking-wider text-ink-subtle">{l}</span>
-                <span className="text-lg font-semibold leading-6.5">{v ?? "—"}{v ? <small className="pl-0.5 text-[13px] font-normal text-ink-subtle">cm</small> : null}</span>
-              </li>
-            ))}
-          </ul>
-          <p className="flex justify-between rounded-[2px] bg-field/60 px-2 py-1 text-[13px]"><span className="text-ink-muted">Default size</span><b>{m.size ? m.size.toUpperCase() : "Not set"}</b></p>
-        </>
-      ) : (
-        <p className="text-[15px] leading-6 text-ink-muted">Save your measurements so we can pre-select the right size and tailor every piece before dispatch.</p>
-      )}
-    </Card>
-  );
-}
-
-function AddressesSummary({ user }: { user: AccountUser }) {
-  return (
-    <Card eyebrow="Private residences" title="Saved Addresses" action={<Link href={href("addresses")} className="label-caps text-accent underline underline-offset-2">Manage</Link>}>
-      {user.addresses.length === 0 ? (
-        <p className="text-[15px] leading-6 text-ink-muted">No saved addresses yet.</p>
-      ) : (
-        <ul className="flex flex-col gap-2">
-          {user.addresses.slice(0, 2).map((a) => (
-            <li key={a.id} className="rounded-sm bg-white p-3 shadow-hairline">
-              <p className="flex items-center justify-between text-base font-semibold leading-6">{a.label}{a.isDefault && <span className="rounded-[2px] bg-[#fed9b9] px-2 text-[9px] font-bold uppercase leading-5 text-[#795d44]">Default</span>}</p>
-              <p className="text-[13px] leading-5 text-ink-muted">{a.line1}, {a.city}, {a.country}</p>
-            </li>
-          ))}
-        </ul>
-      )}
     </Card>
   );
 }
@@ -91,7 +36,7 @@ function Row({ to, icon: Icon, title, text, meta }: { to: string; icon: typeof U
   );
 }
 
-function MobileOverview({ user, name, email }: { user: AccountUser | null; name: string; email: string }) {
+function MobileOverview({ user, name, email, orderCount }: { user: AccountUser | null; name: string; email: string; orderCount: number }) {
   const m = user?.measurements;
   return (
     <div className="flex flex-col gap-4 pt-4 lg:hidden">
@@ -104,7 +49,7 @@ function MobileOverview({ user, name, email }: { user: AccountUser | null; name:
             {user && <p className="mt-2 w-fit rounded-pill bg-accent px-2.5 py-0.5 text-[11px] font-semibold uppercase leading-3.5 tracking-wider text-white">Member since {memberSince(user.createdAt)}</p>}
           </div>
         </div>
-        <StatPills variant="mobile" />
+        <StatPills variant="mobile" orders={orderCount} />
       </div>
 
       <section className="flex flex-col gap-2 pt-3">
@@ -112,7 +57,7 @@ function MobileOverview({ user, name, email }: { user: AccountUser | null; name:
         {user ? (
           <>
             <Row to={href("profile")} icon={UserIcon} title="Profile Details" text="Name, phone & preferences" />
-            <Row to={href("orders")} icon={PackageIcon} title="Order History" text="Archived orders & returns" meta="0 orders" />
+            <Row to={href("orders")} icon={PackageIcon} title="Order History" text="Archived orders & returns" meta={`${orderCount} order${orderCount === 1 ? "" : "s"}`} />
             <Row to={href("sizing")} icon={RulerIcon} title="Saved Measurements & Fit" text="Tailored sizing profile" meta={m?.size ? <span className="rounded-md bg-line px-2 text-[11px] text-ink">{m.size.toUpperCase()}</span> : "Not set"} />
             <Row to="/wishlist" icon={HeartIcon} title="My Wardrobe & Wishlist" text="Saved edits for future seasons" />
             <Row to={href("addresses")} icon={PinIcon} title="Shipping Addresses" text="Where we deliver" meta={`${user.addresses.length} saved`} />
@@ -131,7 +76,7 @@ function MobileOverview({ user, name, email }: { user: AccountUser | null; name:
 }
 
 /* ---------- desktop banner + sidebar ---------- */
-function DesktopBanner({ user, name, email }: { user: AccountUser | null; name: string; email: string }) {
+function DesktopBanner({ user, name, email, orderCount }: { user: AccountUser | null; name: string; email: string; orderCount: number }) {
   return (
     <section className="relative hidden items-center justify-between gap-8 overflow-hidden rounded-[8px] bg-surface p-12 shadow-hairline lg:flex">
       <div aria-hidden className="absolute -right-10 -top-12 size-72 rounded-pill bg-[rgba(254,217,185,0.3)] blur-[32px]" />
@@ -147,7 +92,7 @@ function DesktopBanner({ user, name, email }: { user: AccountUser | null; name: 
         <p className="eyebrow pb-1 text-accent">Atelier privileges active</p>
         <p className="text-[13px] leading-5.25 text-ink-muted">Complimentary in-house alterations, white-glove courier handling and private salon styling sessions.</p>
       </div>
-      <div className="relative"><StatPills variant="desktop" /></div>
+      <div className="relative"><StatPills variant="desktop" orders={orderCount} /></div>
     </section>
   );
 }
@@ -182,7 +127,7 @@ function Sidebar({ tab, user }: { tab: Tab; user: AccountUser | null }) {
   );
 }
 
-export function AccountView({ tab, user, fallback, dbDown }: Props) {
+export function AccountView({ tab, user, fallback, dbDown, orders }: Props) {
   const name = user?.name || fallback.name || "Member";
   const email = user?.email || fallback.email;
 
@@ -190,8 +135,11 @@ export function AccountView({ tab, user, fallback, dbDown }: Props) {
   if (tab === "overview") {
     body = user ? (
       <div className="hidden flex-col gap-7 lg:flex">
-        <OrdersEmpty />
-        <div className="grid grid-cols-2 gap-7"><SizingSummary user={user} /><AddressesSummary user={user} /></div>
+        <OrdersCard orders={orders.slice(0, 3)} />
+        <div className="grid grid-cols-2 gap-7">
+          <SizingProfile user={user} />
+          <AddressesSummary user={user} />
+        </div>
       </div>
     ) : <div className="hidden lg:block"><Unavailable dbDown={dbDown} /></div>;
   } else if (!user) {
@@ -199,7 +147,7 @@ export function AccountView({ tab, user, fallback, dbDown }: Props) {
   } else if (tab === "profile") {
     body = <Card eyebrow="Account" title="Profile details"><ProfileForm user={user} /></Card>;
   } else if (tab === "orders") {
-    body = <OrdersEmpty />;
+    body = <OrdersCard orders={orders} />;
   } else if (tab === "sizing") {
     body = <Card eyebrow="Master tailor metrics" title="Custom Sizing Capsule"><p className="text-[13px] leading-5 text-ink-muted">Used to pre-select your size and to tailor off-the-rack pieces before dispatch.</p><SizingForm initial={user.measurements} /></Card>;
   } else if (tab === "addresses") {
@@ -210,8 +158,8 @@ export function AccountView({ tab, user, fallback, dbDown }: Props) {
 
   return (
     <div className="mx-auto max-w-360 px-4 lg:px-6 lg:py-7">
-      <DesktopBanner user={user} name={name} email={email} />
-      {tab === "overview" && <MobileOverview user={user} name={name} email={email} />}
+      <DesktopBanner user={user} name={name} email={email} orderCount={orders.length} />
+      {tab === "overview" && <MobileOverview user={user} name={name} email={email} orderCount={orders.length} />}
       <div className="lg:mt-7 lg:grid lg:grid-cols-12 lg:gap-7">
         <aside className="hidden lg:col-span-3 lg:block"><Sidebar tab={tab} user={user} /></aside>
         <div className="flex flex-col gap-4 pt-4 lg:col-span-9 lg:pt-0">

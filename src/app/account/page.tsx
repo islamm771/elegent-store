@@ -1,13 +1,14 @@
-import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/db";
-import { parseAddresses, parseMeasurements } from "@/lib/account";
 import { AccountView } from "@/features/account/AccountView";
-import { tabs, type AccountUser, type Tab } from "@/features/account/types";
+import { tabs, type AccountUser, type OrderSummary, type Tab } from "@/features/account/types";
 import { MobileTabBar } from "@/features/shell/MobileTabBar";
 import { SiteFooter } from "@/features/shell/SiteFooter";
 import { SiteHeader } from "@/features/shell/SiteHeader";
+import { parseAddresses, parseMeasurements } from "@/lib/account";
+import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/db";
+import { listOrders } from "@/lib/orders";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
 export const metadata = { title: "My account — Elegent" };
 
@@ -20,9 +21,14 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
 
   let user: AccountUser | null = null;
   let dbDown = false;
+  let orders: OrderSummary[] = [];
   try {
     const u = await prisma.user.findUnique({ where: { id: session.user.id } });
     if (u) user = { id: u.id, name: u.name, email: u.email, phone: u.phone ?? "", newsletter: u.newsletter, createdAt: u.createdAt.toISOString(), measurements: parseMeasurements(u.measurements), addresses: parseAddresses(u.addresses) };
+    orders = (await listOrders(session.user.id)).map((o) => ({
+      number: o.number, createdAt: o.createdAt.toISOString(), status: o.status, paymentMethod: o.paymentMethod, paymentStatus: o.paymentStatus,
+      totalCents: o.totalCents, itemCount: o.items.reduce((n, i) => n + i.qty, 0), names: o.items.map((i) => i.name),
+    }));
   } catch (e) {
     console.error("account load failed", e);
     dbDown = true;
@@ -31,8 +37,8 @@ export default async function AccountPage({ searchParams }: { searchParams: Prom
   return (
     <>
       <SiteHeader user={session.user} />
-      <main className="pb-24 pt-16 lg:pb-0 lg:pt-[102px]">
-        <AccountView tab={tab} user={user} dbDown={dbDown} fallback={{ name: session.user.name ?? "", email: session.user.email ?? "" }} />
+      <main className="pb-24 pt-16 lg:pb-0 lg:pt-25.5">
+        <AccountView tab={tab} user={user} dbDown={dbDown} orders={orders} fallback={{ name: session.user.name ?? "", email: session.user.email ?? "" }} />
       </main>
       <SiteFooter />
       <MobileTabBar />

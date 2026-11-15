@@ -10,3 +10,8 @@ export interface AccountUser {
 
 export const memberSince = (iso: string) => new Date(iso).toLocaleDateString("en-US", { month: "long", year: "numeric" });
 export const initials = (name: string) => name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]?.toUpperCase()).join("") || "E";
+
+export interface OrderSummary {
+  number: string; createdAt: string; status: string; paymentMethod: "COD" | "ONLINE"; paymentStatus: string;
+  totalCents: number; itemCount: number; names: string[];
+}

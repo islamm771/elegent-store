@@ -52,12 +52,12 @@ export function CartView() {
       <aside className="h-fit rounded-[8px] bg-surface p-5 shadow-hairline">
         <p className="eyebrow text-accent">Order summary</p>
         <p className="mt-3 flex justify-between text-[15px]"><span>Subtotal</span><b>${subtotal.toFixed(2)}</b></p>
-        <p className="mt-1 text-[13px] text-ink-muted">Shipping and taxes are calculated at checkout.</p>
+        <p className="mt-1 text-[13px] text-ink-muted">Shipping is calculated at checkout — free over $200.</p>
         <p className="mt-3 text-[13px] text-ink-muted">
           {signedIn ? "Your bag is saved to your account." : <>Your bag is stored on this device. <Link href="/login?callbackUrl=/cart" className="text-ink underline underline-offset-2">Sign in</Link> to keep it across devices.</>}
         </p>
         <Link href="/wishlist" className="label-caps mt-3 inline-block text-ink underline underline-offset-2">Go to wishlist{wishlist.length ? ` (${wishlist.length})` : ""}</Link>
-        <button type="button" disabled className="mt-5 w-full rounded-field bg-black px-6 py-4 text-[13px] font-semibold uppercase tracking-widest text-white opacity-50">Checkout — coming soon</button>
+        <Link href={signedIn ? "/checkout" : "/login?callbackUrl=/checkout"} className="mt-5 block w-full rounded-field bg-black px-6 py-4 text-center text-[13px] font-semibold uppercase tracking-widest text-white shadow-cta hover:bg-ink">{signedIn ? "Checkout" : "Sign in to checkout"}</Link>
       </aside>
     </div>
   );
