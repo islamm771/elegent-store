@@ -42,3 +42,15 @@ export async function sendPasswordResetEmail({ to, name, url }: { to: string; na
 
   await t.sendMail({ from: process.env.MAIL_FROM || `Elegent <${process.env.SMTP_USER ?? "no-reply@localhost"}>`, to, subject: "Reset your Elegent password", text, html });
 }
+
+/** Plain-text email, used by the legal inquiry form. Returns false if no mail server is configured (production). */
+export async function sendPlainEmail({ to, subject, text, replyTo }: { to: string; subject: string; text: string; replyTo?: string }): Promise<boolean> {
+  const t = transport();
+  if (!t) {
+    if (process.env.NODE_ENV === "production") { console.error("SMTP is not configured — email was NOT sent."); return false; }
+    console.log(`[dev] email to ${to}\nSubject: ${subject}\nReply-To: ${replyTo ?? "-"}\n\n${text}`);
+    return true;
+  }
+  await t.sendMail({ from: process.env.MAIL_FROM || `Elegent <${process.env.SMTP_USER ?? "no-reply@localhost"}>`, to, replyTo, subject, text });
+  return true;
+}
