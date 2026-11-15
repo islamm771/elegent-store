@@ -1,8 +1,8 @@
 "use client";
+import { useStore } from "@/features/shop/store";
+import { cn } from "@/lib/cn";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { cn } from "@/lib/cn";
-import { useStore } from "@/features/shop/store";
 import { initials } from "./types";
 
 export function Avatar({ name, className }: { name: string; className?: string }) {
@@ -25,9 +25,9 @@ export function StatPills({ orders = 0, variant }: { orders?: number; variant: "
     <ul className={cn("flex", variant === "mobile" ? "gap-1 pt-1" : "gap-4")}>
       {items.map((s) => (
         <li key={s.label} className="flex-1">
-          <Link href={s.href} className={cn("flex flex-col items-center justify-center", variant === "mobile" ? "rounded-[8px] bg-surface p-2.5" : "min-w-24 rounded-[4px] bg-white px-4 py-3 shadow-hairline")}>
-            <span className={cn("font-semibold uppercase text-ink-muted", variant === "mobile" ? "text-[11px] tracking-[0.1em]" : "text-[10px] tracking-[0.05em] text-ink-subtle")}>{s.label}</span>
-            <span className={cn("font-serif font-semibold", variant === "mobile" ? "pt-0.5 text-lg leading-[26px]" : "text-2xl leading-8")}>{s.value}</span>
+          <Link href={s.href} className={cn("flex flex-col items-center justify-center", variant === "mobile" ? "rounded-[8px] bg-surface p-2.5" : "min-w-24 rounded-sm bg-white px-4 py-3 shadow-hairline")}>
+            <span className={cn("font-semibold uppercase text-ink-muted", variant === "mobile" ? "text-[11px] tracking-widest" : "text-[10px] tracking-wider text-ink-subtle")}>{s.label}</span>
+            <span className={cn("font-serif font-semibold", variant === "mobile" ? "pt-0.5 text-lg leading-6.5" : "text-2xl leading-8")}>{s.value}</span>
           </Link>
         </li>
       ))}

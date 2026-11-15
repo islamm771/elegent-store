@@ -27,7 +27,7 @@ export function ProductMobileHeader({ product }: { product: ShopProduct }) {
 export function ProductBreadcrumb({ product }: { product: ShopProduct }) {
   const { isSaved, toggleSaved } = useStore();
   const saved = isSaved(product.id);
-  const crumb = "text-[11px] font-semibold uppercase tracking-[0.05em] text-ink-subtle hover:text-ink";
+  const crumb = "text-[11px] font-semibold uppercase tracking-wider text-ink-subtle hover:text-ink";
   return (
     <div>
       <div className="mx-auto flex max-w-360 px-4 items-center justify-between py-6 flex-wrap gap-4 lg:px-6">

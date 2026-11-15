@@ -6,7 +6,7 @@ export function RegisterHero({ image = "/brand/register-hero.jpg" }: { image?: s
   return (
     <div className="relative h-full text-canvas">
       <div className="absolute inset-0 bg-accent bg-cover bg-center" style={{ backgroundImage: `url(${image})` }} />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 via-50% to-black/30" />
+      <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/25 via-50% to-black/30" />
 
       <div className="relative flex h-full flex-col justify-between p-12">
         <div className="flex items-center justify-between">

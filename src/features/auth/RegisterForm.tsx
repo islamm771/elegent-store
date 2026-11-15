@@ -1,11 +1,11 @@
 "use client";
+import { passwordStrength } from "@/lib/password";
+import { validateRegister, type RegisterErrors } from "@/lib/validation";
+import { ArrowRightIcon, Button, Checkbox, Divider, MailIcon, PhoneIcon, StrengthMeter, TextField, UserIcon } from "@/ui";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import toast from "react-hot-toast";
-import { ArrowRightIcon, Button, Checkbox, Divider, MailIcon, PhoneIcon, StrengthMeter, TextField, UserIcon } from "@/ui";
-import { passwordStrength } from "@/lib/password";
-import { validateRegister, type RegisterErrors } from "@/lib/validation";
 import { SocialAuth, type SocialProvider } from "./SocialAuth";
 
 const link = "text-ink underline decoration-accent underline-offset-2";
@@ -62,7 +62,7 @@ export function RegisterForm({ providers = [] }: { providers?: SocialProvider[] 
 
         <TextField label="Phone number" type="tel" name="phone" autoComplete="tel" placeholder="+1 (555) 019-2834"
           value={values.phone} onChange={set("phone")} error={errors.phone}
-          aside={<span className="text-[11px] font-semibold lowercase text-ink-subtle lg:uppercase lg:tracking-[0.1em]">optional</span>}
+          aside={<span className="text-[11px] font-semibold lowercase text-ink-subtle lg:uppercase lg:tracking-widest">optional</span>}
           trailing={<PhoneIcon width={14} height={14} />} />
 
         <div>
@@ -82,7 +82,7 @@ export function RegisterForm({ providers = [] }: { providers?: SocialProvider[] 
         <Checkbox name="newsletter" checked={newsletter} onChange={(e) => setNewsletter(e.target.checked)}>
           Subscribe to curated editorial drops, private runway invites, and seasonal sales.
         </Checkbox>
-        <p className="text-[13px] leading-[21px] text-ink-subtle lg:bg-surface lg:p-3.5 lg:text-ink-muted/80">
+        <p className="text-[13px] leading-5.25 text-ink-subtle lg:bg-surface lg:p-3.5 lg:text-ink-muted/80">
           By selecting <span className="lg:font-semibold lg:text-ink">Create Account</span>, you acknowledge agreement with our{" "}
           <Link href="/terms" className={link}>Terms of Service</Link> and{" "}
           <Link href="/privacy" className={link}>Privacy Policy</Link>.

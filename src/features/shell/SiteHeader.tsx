@@ -2,6 +2,7 @@ import { UserIcon } from "@/ui";
 import Link from "next/link";
 import { SearchBar } from "../shop/Controls";
 import { BagButton } from "./BagButton";
+import LogoLink from "./LogoLink";
 import { UserMenu } from "./UserMenu";
 import { WishlistButton } from "./WishlistButton";
 
@@ -20,7 +21,7 @@ export function SiteHeader({ user }: { user?: { name?: string | null; email?: st
         Complimentary global express shipping on orders over $200 · Curated editorial drops
       </p>
       <div className="mx-auto flex h-16 max-w-360 items-center justify-between border-b border-sand/60 px-6 lg:h-20 lg:border-0">
-        <Link href="/" className="font-serif text-xl font-bold uppercase tracking-[4px] text-black lg:font-sans lg:text-2xl lg:tracking-[6px]">Elegent</Link>
+        <LogoLink />
 
         {user && (
           <div className="hidden lg:block w-full max-w-100">

@@ -22,7 +22,7 @@ export function Hero() {
           <h1 className="font-serif text-[40px] font-normal leading-[44.8px] tracking-[-1px] lg:text-[72px] lg:font-semibold lg:leading-[75.6px] lg:tracking-[-1.8px]">
             Find The Best<br />Fashion Style<br />For You
           </h1>
-          <p className="max-w-sm pb-6 pt-4 text-[14px] leading-[22.75px] text-ink-muted lg:max-w-lg lg:pb-12 lg:pt-6 lg:text-[18px] lg:leading-[29px]">
+          <p className="max-w-sm pb-6 pt-4 text-[14px] leading-[22.75px] text-ink-muted lg:max-w-lg lg:pb-12 lg:pt-6 lg:text-[18px] lg:leading-7.25">
             We are here to help you, customer. You are important to us and we care about your satisfaction. You will find everything you want here. Just let us help you to complete your elegance.
           </p>
 
@@ -39,7 +39,7 @@ export function Hero() {
             {stats.map((s) => (
               <div key={s.label} className="flex-1">
                 <dd className="font-serif text-2xl font-medium leading-8 text-black">{s.value}</dd>
-                <dt className="text-[11px] font-semibold uppercase leading-[14px] tracking-wider text-ink-subtle">{s.label}</dt>
+                <dt className="text-[11px] font-semibold uppercase leading-3.5 tracking-wider text-ink-subtle">{s.label}</dt>
               </div>
             ))}
           </dl>
@@ -47,7 +47,7 @@ export function Hero() {
 
         <div className="relative pt-2 lg:pt-0">
           <Photo src="/images/home/hero.jpg" tone="#c9a27c" alt="Sienna Buttoned Linen Dress, Look No. 04"
-            className="flex h-[447px] items-end rounded-bl-[64px] rounded-br-[8px] rounded-tl-[8px] rounded-tr-[28px] shadow-[0_20px_25px_-5px_rgba(0,0,0,0.1),0_8px_10px_-6px_rgba(0,0,0,0.1)] lg:h-[580px] lg:rounded-bl-[96px] lg:rounded-tr-[40px]">
+            className="flex h-111.75 items-end rounded-bl-[64px] rounded-br-[8px] rounded-tl-[8px] rounded-tr-[28px] shadow-[0_20px_25px_-5px_rgba(0,0,0,0.1),0_8px_10px_-6px_rgba(0,0,0,0.1)] lg:h-145 lg:rounded-bl-[96px] lg:rounded-tr-[40px]">
             <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent via-50% to-transparent" />
             <div className="relative m-4 flex w-full items-center justify-between rounded-pill bg-canvas/90 px-4 py-2.5 shadow-cta backdrop-blur-md">
               <div className="flex items-center gap-2.5 pr-2">

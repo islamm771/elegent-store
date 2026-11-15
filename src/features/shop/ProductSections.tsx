@@ -39,18 +39,18 @@ export function PairingSection({ items }: { items: ShopProduct[] }) {
           {items.map((p) => (
             <li key={p.id} className="w-48 shrink-0 snap-start lg:w-auto">
               <div className="rounded-[8px] bg-surface p-2 lg:rounded-none lg:bg-transparent lg:p-0">
-                <Photo src={p.images[0]} tone={p.tone} alt={p.name} className="h-[229px] rounded-[4px] lg:h-[370px] lg:rounded-none">
+                <Photo src={p.images[0]} tone={p.tone} alt={p.name} className="h-57.25 rounded-sm lg:h-92.5 lg:rounded-none">
                   <Link href={`/shop/${p.id}`} aria-label={`View ${p.name}`} className="absolute inset-0" />
                   <button type="button" aria-label={`Quick add ${p.name}`} onClick={() => addPair(p)} className="absolute bottom-2 right-2 grid size-9 place-items-center rounded-pill bg-black text-white shadow-cta hover:bg-ink">
                     <PlusIcon width={11} height={11} strokeWidth={2.5} />
                   </button>
                 </Photo>
                 <div className="px-1 pb-1 pt-2.5 lg:px-0 lg:pt-3">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-accent">{categoryName(p.category).split(" & ")[0]}</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-accent">{categoryName(p.category).split(" & ")[0]}</p>
                   <h3 className="truncate text-base font-medium leading-6"><Link href={`/shop/${p.id}`} className="hover:underline">{p.name}</Link></h3>
                   <div className="flex items-center justify-between">
                     <p className="text-base font-semibold">{money(p.price, { cents: true })}</p>
-                    <button type="button" onClick={() => addPair(p)} className="hidden text-[11px] font-semibold uppercase tracking-[0.1em] underline underline-offset-2 lg:block">Quick add</button>
+                    <button type="button" onClick={() => addPair(p)} className="hidden text-[11px] font-semibold uppercase tracking-widest underline underline-offset-2 lg:block">Quick add</button>
                   </div>
                 </div>
               </div>
@@ -100,7 +100,7 @@ export function ReviewsSection({ rating, count, data }: { rating: number; count:
           ) : (
             <p className="text-[13px] leading-5 text-ink-muted">Detailed client feedback for this piece will appear here.</p>
           )}
-          <button type="button" className="border border-ink/30 py-3 text-[13px] font-semibold uppercase tracking-[0.1em] hover:bg-field">Write an atelier review</button>
+          <button type="button" className="border border-ink/30 py-3 text-[13px] font-semibold uppercase tracking-widest hover:bg-field">Write an atelier review</button>
         </aside>
 
         <div className="col-span-8 flex flex-col divide-y divide-line">
