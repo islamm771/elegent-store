@@ -1,3 +1,4 @@
+import { isAdmin } from "@/lib/admin";
 import { UserIcon } from "@/ui";
 import Link from "next/link";
 import { SearchBar } from "../shop/Controls";
@@ -14,7 +15,8 @@ const nav = [
   { label: "Trends", href: "/shop?dept=trends" },
 ];
 
-export function SiteHeader({ user }: { user?: { name?: string | null; email?: string | null } | null }) {
+export async function SiteHeader({ user }: { user?: { name?: string | null; email?: string | null } | null }) {
+  const admin = user ? await isAdmin() : false;
   return (
     <header className="fixed inset-x-0 top-0 z-40 bg-canvas/90 shadow-[0_1px_8px_rgba(45,34,27,0.06)] backdrop-blur-md">
       <p className="eyebrow hidden bg-line/80 px-6 py-1 text-center text-ink-muted lg:block">
@@ -45,7 +47,7 @@ export function SiteHeader({ user }: { user?: { name?: string | null; email?: st
           {/* desktop: text links */}
           <div className="hidden items-center gap-5 lg:flex">
             {user ? (
-              <UserMenu user={user} />
+              <UserMenu user={user} admin={admin} />
             ) : (
               <>
                 <Link href="/login" className="text-[13px] font-semibold uppercase tracking-wider text-ink-muted hover:text-black">Login</Link>

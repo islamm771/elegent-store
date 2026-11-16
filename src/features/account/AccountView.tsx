@@ -12,6 +12,7 @@ import SizingProfile from "./SizingProfile";
 import { memberSince, type AccountUser, type OrderSummary, type Tab } from "./types";
 
 interface Props { tab: Tab; user: AccountUser | null; fallback: { name: string; email: string }; dbDown: boolean; orders: OrderSummary[] }
+const titles: Record<Exclude<Tab, "overview">, string> = { profile: "Profile details", orders: "Order vault", sizing: "Sizing profile", addresses: "Saved addresses", security: "Security" };
 
 function Unavailable({ dbDown }: { dbDown: boolean }) {
   return (
@@ -22,6 +23,8 @@ function Unavailable({ dbDown }: { dbDown: boolean }) {
     </Card>
   );
 }
+
+
 
 /* ---------- mobile overview list ---------- */
 function Row({ to, icon: Icon, title, text, meta }: { to: string; icon: typeof UserIcon; title: string; text: string; meta?: ReactNode }) {
@@ -136,10 +139,7 @@ export function AccountView({ tab, user, fallback, dbDown, orders }: Props) {
     body = user ? (
       <div className="hidden flex-col gap-7 lg:flex">
         <OrdersCard orders={orders.slice(0, 3)} />
-        <div className="grid grid-cols-2 gap-7">
-          <SizingProfile user={user} />
-          <AddressesSummary user={user} />
-        </div>
+        <div className="grid grid-cols-2 gap-7"><SizingProfile user={user} /><AddressesSummary user={user} /></div>
       </div>
     ) : <div className="hidden lg:block"><Unavailable dbDown={dbDown} /></div>;
   } else if (!user) {

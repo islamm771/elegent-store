@@ -1,9 +1,9 @@
 "use client";
+import { useStore } from "@/features/shop/store";
+import { cn } from "@/lib/cn";
+import { GridIcon, HeartIcon, HomeIcon, UserIcon } from "@/ui";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { GridIcon, HeartIcon, HomeIcon, UserIcon } from "@/ui";
-import { cn } from "@/lib/cn";
-import { useStore } from "@/features/shop/store";
 
 const tabs = [
   { label: "Home", href: "/", icon: HomeIcon },
@@ -27,7 +27,7 @@ export function MobileTabBar() {
                 <span className="relative">
                   <Icon width={17} height={17} strokeWidth={active ? 2.25 : 1.75} />
                   {href === "/wishlist" && wishlist.length > 0 && (
-                    <span className="absolute -right-2.5 -top-1.5 grid min-w-3.5 place-items-center rounded-pill bg-black px-1 text-[9px] font-bold leading-[14px] text-white">{wishlist.length}</span>
+                    <span className="absolute -right-2.5 -top-1.5 grid min-w-3.5 place-items-center rounded-pill bg-black px-1 text-[9px] font-bold leading-3.5 text-white">{wishlist.length}</span>
                   )}
                 </span>
                 {label}
