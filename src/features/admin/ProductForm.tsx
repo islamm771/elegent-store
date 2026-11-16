@@ -150,7 +150,7 @@ export function ProductForm({ initial, editing }: { initial: ProductFormValues; 
         </label>
         <TextField label="Badge text" value={v.badgeText} onChange={text("badgeText")} maxLength={30} error={errors.badge} aside={<span className="text-[11px] text-ink-subtle">optional</span>} />
         <label className="flex flex-col gap-1.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-ink-muted">Badge style
-          <select value={v.badgeTone} onChange={text("badgeTone")} className={cn(select, "font-normal normal-case capitalize tracking-normal")}>{BADGE_TONES.map((t) => <option key={t} value={t}>{t}</option>)}</select>
+          <select value={v.badgeTone} onChange={text("badgeTone")} className={cn(select, "font-normal capitalize tracking-normal")}>{BADGE_TONES.map((t) => <option key={t} value={t}>{t}</option>)}</select>
         </label>
       </div>
 

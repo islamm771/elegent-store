@@ -1,7 +1,7 @@
-import { cn } from "@/lib/cn";
 import { MobileTabBar } from "@/features/shell/MobileTabBar";
 import { SiteFooter } from "@/features/shell/SiteFooter";
 import { SiteHeader } from "@/features/shell/SiteHeader";
+import { cn } from "@/lib/cn";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
@@ -24,7 +24,7 @@ export function AdminShell({ user, active, title, action, children }: {
         <nav aria-label="Admin sections" className="mb-6 flex gap-6 border-b border-line">
           {SECTIONS.map((s) => (
             <Link key={s.id} href={s.href} aria-current={s.id === active ? "page" : undefined}
-              className={cn("-mb-px border-b-2 pb-3 text-[13px] font-semibold uppercase tracking-[0.1em]", s.id === active ? "border-black text-ink" : "border-transparent text-ink-subtle hover:text-ink")}>
+              className={cn("-mb-px border-b-2 pb-3 text-[13px] font-semibold uppercase tracking-widest", s.id === active ? "border-black text-ink" : "border-transparent text-ink-subtle hover:text-ink")}>
               {s.label}
             </Link>
           ))}

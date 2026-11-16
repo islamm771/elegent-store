@@ -2,7 +2,7 @@
 import { initials } from "@/features/account/types";
 import { useStore } from "@/features/shop/store";
 import { cn } from "@/lib/cn";
-import { BadgeCheckIcon, BagIcon, ChevronDownIcon, GridIcon, ChevronRightIcon, HeartIcon, LogOutIcon, PackageIcon, RulerIcon, UserIcon } from "@/ui";
+import { BadgeCheckIcon, BagIcon, ChevronDownIcon, ChevronRightIcon, GridIcon, HeartIcon, LogOutIcon, PackageIcon, RulerIcon, UserIcon } from "@/ui";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -58,7 +58,7 @@ export function UserMenu({ user, admin }: Props) {
     fetch("/api/orders/count", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
       .then((d: { count?: number } | null) => { if (!off && typeof d?.count === "number") setOrders(d.count); })
-      .catch(() => {});
+      .catch(() => { });
     return () => { off = true; };
   }, [path]);
 
