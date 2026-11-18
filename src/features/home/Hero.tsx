@@ -10,7 +10,7 @@ const stats = [
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden px-4 py-6 lg:bg-field lg:px-6 lg:py-26">
+    <section className="relative overflow-hidden py-6 lg:bg-field lg:py-26">
       <div aria-hidden className="absolute -left-32 -top-32 hidden size-96 rounded-pill bg-[rgba(254,217,185,0.2)] blur-[32px] lg:block" />
       <div aria-hidden className="absolute bottom-0 left-1/2 right-1/4 hidden h-80 rounded-pill bg-[rgba(239,231,219,0.4)] blur-[20px] lg:block" />
 

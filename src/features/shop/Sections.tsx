@@ -25,7 +25,7 @@ export function DeptPills({ query }: { query: ShopQuery }) {
 
 export function MobileLookbook() {
   return (
-    <div className="px-4 pb-1 pt-3 lg:hidden">
+    <div className="px-4 pt-3 lg:hidden">
       <div className="flex items-center justify-between rounded-[8px] bg-field p-4 shadow-hairline">
         <div className="pr-2">
           <p className="label-caps text-accent">Autumn lookbook</p>

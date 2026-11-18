@@ -17,10 +17,10 @@ const nav = [
 export function SiteHeader({ user }: { user?: { name?: string | null; email?: string | null } | null }) {
   return (
     <header className="fixed inset-x-0 top-0 z-40 bg-canvas/90 shadow-[0_1px_8px_rgba(45,34,27,0.06)] backdrop-blur-md">
-      <p className="eyebrow hidden bg-line/80 px-6 py-1 text-center text-ink-muted lg:block">
+      <p className="eyebrow hidden bg-line/80 px-4 py-1 text-center text-ink-muted lg:block lg:px-6">
         Complimentary global express shipping on orders over $200 · Curated editorial drops
       </p>
-      <div className="mx-auto flex h-16 max-w-360 items-center justify-between border-b border-sand/60 px-6 lg:h-20 lg:border-0">
+      <div className="mx-auto flex h-16 max-w-360 items-center justify-between border-b border-sand/60 px-4 lg:h-20 lg:border-0 lg:px-6">
         <LogoLink />
 
         {user && (

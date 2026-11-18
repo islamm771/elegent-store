@@ -30,7 +30,7 @@ export function ProductBreadcrumb({ product }: { product: ShopProduct }) {
   const crumb = "text-[11px] font-semibold uppercase tracking-wider text-ink-subtle hover:text-ink";
   return (
     <div>
-      <div className="mx-auto flex max-w-360 px-4 items-center justify-between py-6 flex-wrap gap-4 lg:px-6">
+      <div className="mx-auto flex max-w-360 px-6 items-center justify-between py- flex-wrap gap-4 lg:px-6">
         <nav aria-label="Breadcrumb" className="flex items-center gap-2 flex-wrap">
           <Link href="/" className={crumb}>Home</Link><span className="text-ink-faint">/</span>
           <Link href="/shop" className={crumb}>Shop</Link><span className="text-ink-faint">/</span>

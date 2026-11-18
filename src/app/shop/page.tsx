@@ -35,7 +35,7 @@ export default async function ShopPage({ searchParams }: { searchParams: Promise
       <main className="pb-24 pt-16 lg:pb-0 lg:pt-25.5">
         {/* mobile controls */}
         <div className="lg:hidden">
-          <div className="px-4 pb-2 pt-3"><SearchBar /></div>
+          <div className="px-4 pb-2 pt-6"><SearchBar /></div>
           <DeptPills query={query} />
           <div className="px-4"><MobileFilterBar total={total} /></div>
         </div>
@@ -56,7 +56,7 @@ export default async function ShopPage({ searchParams }: { searchParams: Promise
               <div className="sticky top-30.5 max-h-[calc(100dvh-8.5rem)] overflow-y-auto"><FilterPanel categoryCounts={categoryCounts} totalAll={totalAll} /></div>
             </aside>
 
-            <div className="flex flex-col gap-7 px-4 py-4 lg:col-span-9 lg:gap-12 lg:p-0">
+            <div className="flex flex-col gap-7 py-4 lg:col-span-9 lg:gap-12 lg:p-0">
               {!data ? (
                 <div role="alert" className="flex flex-col items-center gap-3 rounded-[8px] bg-surface/60 px-6 py-16 text-center">
                   <h2 className="font-serif text-2xl">We couldn’t load the collection</h2>
