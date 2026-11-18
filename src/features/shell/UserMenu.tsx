@@ -2,13 +2,13 @@
 import { initials } from "@/features/account/types";
 import { useStore } from "@/features/shop/store";
 import { cn } from "@/lib/cn";
-import { BadgeCheckIcon, BagIcon, ChevronDownIcon, ChevronRightIcon, HeartIcon, LogOutIcon, PackageIcon, RulerIcon, UserIcon } from "@/ui";
+import { BadgeCheckIcon, BagIcon, ChevronDownIcon, ChevronRightIcon, GridIcon, HeartIcon, LogOutIcon, PackageIcon, RulerIcon, UserIcon } from "@/ui";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useId, useRef, useState, type ComponentType, type ReactNode, type SVGProps } from "react";
 
-interface Props { user: { name?: string | null; email?: string | null } }
+interface Props { user: { name?: string | null; email?: string | null }; admin?: boolean }
 type Icon = ComponentType<SVGProps<SVGSVGElement>>;
 
 const GOLD = "text-[#C5A059]";
@@ -31,7 +31,7 @@ const Count = ({ n }: { n: number }) => (
 );
 
 /** Signed-in account menu for the desktop header. Name/email come from the session; counters from the user's bag + wishlist. */
-export function UserMenu({ user }: Props) {
+export function UserMenu({ user, admin }: Props) {
   const name = user.name?.trim() || "Account";
   const email = user.email ?? "";
   const first = name.split(/\s+/)[0];
@@ -58,7 +58,7 @@ export function UserMenu({ user }: Props) {
     fetch("/api/orders/count", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
       .then((d: { count?: number } | null) => { if (!off && typeof d?.count === "number") setOrders(d.count); })
-      .catch(() => {});
+      .catch(() => { });
     return () => { off = true; };
   }, [path]);
 
@@ -140,6 +140,7 @@ export function UserMenu({ user }: Props) {
             <Item href="/account?tab=orders" icon={PackageIcon} label="Order vault & shipments" onNavigate={() => close()} />
             <Item href="/account?tab=sizing" icon={RulerIcon} label="Sizing profile" onNavigate={() => close()} />
             <Item href="/wishlist" icon={HeartIcon} label="Wishlist" right={ready && wishlist.length > 0 ? <Count n={wishlist.length} /> : undefined} onNavigate={() => close()} />
+            {admin && <Item href="/admin/orders" icon={GridIcon} label="Admin panel" onNavigate={() => close()} />}
             <Item href="/cart" icon={BagIcon} label="Shopping bag" right={ready && count > 0 ? <Count n={count} /> : undefined} onNavigate={() => close()} />
           </ul>
 

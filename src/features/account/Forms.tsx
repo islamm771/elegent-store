@@ -208,7 +208,7 @@ export function PasswordForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4 lg:max-w-md">
+    <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
       {errors.form && <FieldMsg>{errors.form}</FieldMsg>}
       <TextField label="Current password" type="password" autoComplete="current-password" value={v.current} onChange={set("current")} error={errors.current} />
       <div>

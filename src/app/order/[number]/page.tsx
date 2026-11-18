@@ -4,6 +4,7 @@ import { Photo } from "@/features/home/Photo";
 import { MobileTabBar } from "@/features/shell/MobileTabBar";
 import { SiteFooter } from "@/features/shell/SiteFooter";
 import { SiteHeader } from "@/features/shell/SiteHeader";
+import { isAdmin } from "@/lib/admin";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { money } from "@/lib/money";
@@ -23,8 +24,13 @@ export default async function OrderPage({ params }: { params: Promise<{ number: 
   const { number } = await params;
   if (!session) redirect(`/login?callbackUrl=/order/${encodeURIComponent(number)}`);
 
-  let order = await getOrderForUser(number, session.user.id);
+  // customers see their own orders only; admins can open any order
+  const admin = await isAdmin();
+  let order = admin
+    ? await prisma.order.findFirst({ where: { number }, include: { items: true } })
+    : await getOrderForUser(number, session.user.id);
   if (!order) notFound();
+  const isOwner = order.userId === session.user.id;
   if (order.paymentMethod === "ONLINE" && order.paymentStatus === "PENDING") {
     await syncOrderPayment(order); // the customer may just have come back from the payment page
     order = (await prisma.order.findUnique({ where: { id: order.id }, include: { items: true } })) ?? order;
@@ -44,6 +50,9 @@ export default async function OrderPage({ params }: { params: Promise<{ number: 
     <>
       <SiteHeader user={session.user} />
       <main className="mx-auto min-h-[57vh] max-w-360 px-4 pb-24 pt-16 lg:pb-10 lg:pt-25.5 lg:px-6">
+        {admin && !isOwner && (
+          <p className="mt-2 rounded-field bg-field px-4 py-3 text-[13px] text-ink-muted">Admin view — customer: <b>{order.email}</b>. <Link href="/admin/orders" className="underline underline-offset-2">Back to admin orders</Link></p>
+        )}
         <div className="flex flex-col items-start gap-3 py-8">
           <span className="grid size-12 place-items-center rounded-full bg-peach text-ink">{awaiting || cancelled ? <ClockIcon width={20} height={20} /> : <CheckIcon width={20} height={20} />}</span>
           <p className="eyebrow text-accent">Order {order.number}</p>
@@ -85,7 +94,7 @@ export default async function OrderPage({ params }: { params: Promise<{ number: 
           </div>
         </div>
 
-        {(order.status === "PENDING" || order.status === "CONFIRMED") && (
+        {isOwner && (order.status === "PENDING" || order.status === "CONFIRMED") && (
           <div className="mt-6"><CancelOrderButton number={order.number} paid={order.paymentStatus === "PAID"} /></div>
         )}
         {cancelled && order.paymentMethod === "ONLINE" && order.paymentStatus === "PAID" && (
