@@ -1,5 +1,6 @@
 "use client";
 import { cn } from "@/lib/cn";
+import { categoryTab } from "@/types";
 import Link from "next/link";
 import { useState } from "react";
 import CategoryCard from "./CategoryCard";
@@ -7,7 +8,7 @@ import { categories, categoryTabs } from "./data";
 import { SectionHeader } from "./Photo";
 
 export function Categories({ counts }: { counts: Record<string, number> }) {
-  const [tab, setTab] = useState<(typeof categoryTabs)[number]>("all");
+  const [tab, setTab] = useState<categoryTab>("all");
   const shown = categories.filter((c) => tab === "all" || (c.groups as readonly string[]).includes(tab));
 
   return (

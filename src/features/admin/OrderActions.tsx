@@ -1,12 +1,9 @@
 "use client";
+import { ApiError, errorText } from "@/lib/api/http";
+import { ordersApi } from "@/services/orders";
+import { NEXT } from "@/types";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-
-const NEXT: Record<string, { to: string; label: string } | undefined> = {
-  CONFIRMED: { to: "PACKED", label: "Mark packed" },
-  PACKED: { to: "SHIPPED", label: "Out for delivery" },
-  SHIPPED: { to: "DELIVERED", label: "Mark delivered" },
-};
 
 export function OrderActions({ number, status, cod }: { number: string; status: string; cod: boolean }) {
   const router = useRouter();
@@ -14,17 +11,22 @@ export function OrderActions({ number, status, cod }: { number: string; status: 
   const [err, setErr] = useState<string | null>(null);
   const next = NEXT[status];
   if (!next) return null;
+  const target = next.to;
 
   async function go() {
-    if (next!.to === "DELIVERED" && cod && !confirm("Cash was collected from the customer?")) return;
+    if (target === "DELIVERED" && cod && !confirm("Cash was collected from the customer?")) return;
     setBusy(true); setErr(null);
     try {
-      const res = await fetch(`/api/admin/orders/${encodeURIComponent(number)}`, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify({ status: next!.to }) });
-      if (res.ok) router.refresh();
-      else setErr(res.status === 409 ? "Already changed — refreshing." : res.status === 403 ? "Not allowed." : "Failed, try again.");
-      if (res.status === 409) router.refresh();
-    } catch { setErr("Network problem."); }
-    setBusy(false);
+      await ordersApi.setStatus(number, target)
+      router.refresh();
+    } catch (e) {
+      setErr(errorText(e, { 403: "Not allowed.", 409: "Already changed — refreshing." }, "Failed, try again."));
+      if (e instanceof ApiError && e.status === 409) {
+        router.refresh();
+      }
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (

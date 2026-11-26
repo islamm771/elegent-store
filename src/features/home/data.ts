@@ -1,3 +1,5 @@
+import { category, categoryTab } from "@/types";
+
 /** Home category cards. `where` is how each card counts and links into the catalogue. Photos: /public/images/home/. */
 export const categories: readonly category[] = [
   { id: "dresses",   title: "Dresses & Silhouettes", href: "/shop?cat=dresses",             where: { category: "dresses" },          groups: ["women", "atelier"], image: "/images/home/dresses.jpg",   tone: "#c49a72" },

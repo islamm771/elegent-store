@@ -2,86 +2,24 @@
 import { initials } from "@/features/account/types";
 import { useStore } from "@/features/shop/store";
 import { cn } from "@/lib/cn";
-import { BadgeCheckIcon, BagIcon, ChevronDownIcon, ChevronRightIcon, GridIcon, HeartIcon, LogOutIcon, PackageIcon, RulerIcon, UserIcon } from "@/ui";
+import { BadgeCheckIcon, BagIcon, ChevronDownIcon, GridIcon, HeartIcon, LogOutIcon, PackageIcon, RulerIcon, UserIcon } from "@/ui";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useId, useRef, useState, type ComponentType, type ReactNode, type SVGProps } from "react";
+import { Count, GOLD, Item, itemClass } from "./UserMenuParts";
+import { useDropdownMenu } from "./useDropdownMenu";
+import { useOrderCount } from "./useOrderCount";
 
 interface Props { user: { name?: string | null; email?: string | null }; admin?: boolean }
-type Icon = ComponentType<SVGProps<SVGSVGElement>>;
 
-const GOLD = "text-[#C5A059]";
-const itemClass = "flex w-full items-center gap-3 rounded-[8px] px-3 py-2.5 text-left text-[13px] font-medium text-ink outline-none transition-colors hover:bg-sand/70 focus-visible:bg-sand/70 focus-visible:ring-2 focus-visible:ring-accent/40";
-
-function Item({ href, icon: I, label, right, onNavigate }: { href: string; icon: Icon; label: string; right?: ReactNode; onNavigate: () => void }) {
-  return (
-    <li role="none">
-      <Link href={href} role="menuitem" onClick={onNavigate} className={itemClass}>
-        <I width={16} height={16} className="shrink-0 text-ink-muted" />
-        <span className="flex-1">{label}</span>
-        {right ?? <ChevronRightIcon width={14} height={14} className="text-ink-subtle" />}
-      </Link>
-    </li>
-  );
-}
-
-const Count = ({ n }: { n: number }) => (
-  <span className="rounded-sm bg-sand px-2 py-0.5 text-[11px] font-semibold text-accent">{n}</span>
-);
-
-/** Signed-in account menu for the desktop header. Name/email come from the session; counters from the user's bag + wishlist. */
+/** Signed-in account menu for the desktop header. Layout only: open/close in useDropdownMenu, the counter in useOrderCount. */
 export function UserMenu({ user, admin }: Props) {
   const name = user.name?.trim() || "Account";
   const email = user.email ?? "";
   const first = name.split(/\s+/)[0];
 
   const { wishlist, count, ready } = useStore();
-  const [open, setOpen] = useState(false);
-  const root = useRef<HTMLDivElement>(null);
-  const trigger = useRef<HTMLButtonElement>(null);
-  const menuId = useId();
-  const path = usePathname();
-
-  const close = useCallback((refocus = false) => {
-    setOpen(false);
-    if (refocus) trigger.current?.focus();
-  }, []);
-
-  // close after any navigation
-  useEffect(() => setOpen(false), [path]);
-
-  // number of orders (re-read after each navigation, e.g. right after placing one)
-  const [orders, setOrders] = useState<number | null>(null);
-  useEffect(() => {
-    let off = false;
-    fetch("/api/orders/count", { cache: "no-store" })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d: { count?: number } | null) => { if (!off && typeof d?.count === "number") setOrders(d.count); })
-      .catch(() => { });
-    return () => { off = true; };
-  }, [path]);
-
-  // outside click + Escape
-  useEffect(() => {
-    if (!open) return;
-    const onDown = (e: PointerEvent) => { if (!root.current?.contains(e.target as Node)) setOpen(false); };
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") close(true); };
-    document.addEventListener("pointerdown", onDown);
-    document.addEventListener("keydown", onKey);
-    return () => { document.removeEventListener("pointerdown", onDown); document.removeEventListener("keydown", onKey); };
-  }, [open, close]);
-
-  // arrow keys move between items
-  function onMenuKey(e: React.KeyboardEvent<HTMLDivElement>) {
-    if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "Home" && e.key !== "End") return;
-    const items = Array.from(e.currentTarget.querySelectorAll<HTMLElement>('[role="menuitem"]'));
-    if (!items.length) return;
-    e.preventDefault();
-    const i = items.indexOf(document.activeElement as HTMLElement);
-    const next = e.key === "Home" ? 0 : e.key === "End" ? items.length - 1 : e.key === "ArrowDown" ? (i + 1) % items.length : (i - 1 + items.length) % items.length;
-    items[next].focus();
-  }
+  const orders = useOrderCount();
+  const { open, close, toggle, root, trigger, menuId, onMenuKey } = useDropdownMenu();
 
   const stats = [
     { label: "Orders", value: orders === null ? "–" : String(orders), href: "/account?tab=orders" },
@@ -97,7 +35,7 @@ export function UserMenu({ user, admin }: Props) {
         aria-haspopup="menu"
         aria-expanded={open}
         aria-controls={open ? menuId : undefined}
-        onClick={() => setOpen((o) => !o)}
+        onClick={toggle}
         className="flex h-12.5 items-center rounded-4xl border border-accent/20 bg-sand p-3 pr-4 text-xs font-bold leading-4 text-[#2D221B] transition-colors duration-300 hover:bg-[#E0D3C1]"
       >
         <span aria-hidden className={cn("mr-2 grid size-8 place-items-center rounded-full border border-accent bg-ink text-sm font-semibold leading-5", GOLD)}>{initials(name)}</span>
